@@ -1,0 +1,47 @@
+@import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-surface text-ink font-sans text-base antialiased;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    @apply outline-none focus-visible:ring-4 focus-visible:ring-accent-300;
+  }
+}
+
+@layer components {
+  .input {
+    @apply w-full min-h-touch rounded-xl border border-primary-200 bg-white px-4 py-3 text-base text-ink placeholder:text-muted/70 focus:border-primary-500;
+  }
+  .label {
+    @apply mb-1.5 block text-[15px] font-semibold text-primary-900;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm font-semibold;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  .print-break {
+    break-inside: avoid;
+  }
+}
