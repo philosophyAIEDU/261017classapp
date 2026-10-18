@@ -42,7 +42,7 @@ export default function CreateClass() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <label className="block">
             <span className="label">{terms.group} 이름</span>
-            <input className="input" value={name} onChange={(e) => setName(e.target.value)} placeholder="예: 5학년 3반, 토요 글쓰기반" required maxLength={30} />
+            <input className="input" value={name} onChange={(e) => setName(e.target.value)} placeholder="예: 중급 회화 A반, 토요 영작반" required maxLength={30} />
           </label>
           <InlineError message={error} />
           <BigButton full type="submit" loading={busy}>

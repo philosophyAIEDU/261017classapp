@@ -7,7 +7,7 @@ import { BigButton } from '../../components/BigButton';
 import { Card } from '../../components/Card';
 import { PageHeader } from '../../components/PageHeader';
 import { EmptyState, InlineError, PageStatus } from '../../components/Status';
-import { appConfig } from '../../config/appConfig';
+import { appConfig, terms } from '../../config/appConfig';
 import { errorMessage, useAsync } from '../../hooks/useAsync';
 import { personaPresets, TUTOR_SAFETY_RULES } from '../../prompts/tutorPrompt';
 import { repo } from '../../repositories';
@@ -45,7 +45,7 @@ function TutorForm({ onSaved, onCancel }: { onSaved: () => void; onCancel: () =>
       <form onSubmit={handleSubmit} className="space-y-4">
         <label className="block">
           <span className="label">주제</span>
-          <input className="input" value={topic} onChange={(e) => setTopic(e.target.value)} placeholder="예: 광합성 단원" required maxLength={40} />
+          <input className="input" value={topic} onChange={(e) => setTopic(e.target.value)} placeholder="예: 현재완료 (Present Perfect)" required maxLength={40} />
         </label>
         <div>
           <span className="label">튜터 성격</span>
@@ -59,8 +59,8 @@ function TutorForm({ onSaved, onCancel }: { onSaved: () => void; onCancel: () =>
           <input className="input" value={persona} onChange={(e) => setPersona(e.target.value)} aria-label="튜터 성격 직접 쓰기" required />
         </div>
         <label className="block">
-          <span className="label">선생님 추가 지시문 (선택)</span>
-          <textarea className="input min-h-[100px]" value={instruction} onChange={(e) => setInstruction(e.target.value)} placeholder="예: 교과서 3단원 범위에서만 다뤄 주세요." maxLength={600} />
+          <span className="label">{terms.teacher} 추가 지시문 (선택)</span>
+          <textarea className="input min-h-[100px]" value={instruction} onChange={(e) => setInstruction(e.target.value)} placeholder="예: 교재 Unit 3 범위에서만 다뤄 주세요. 예문은 쉬운 단어로." maxLength={600} />
         </label>
         <details className="rounded-xl bg-surface px-4">
           <summary className="flex min-h-touch cursor-pointer items-center gap-2 font-bold text-primary-800">
@@ -166,7 +166,7 @@ export default function ManageTutors() {
           </Card>
           {askers.length > 0 && viewing && (
             <div className="grid gap-5 lg:grid-cols-[260px_1fr]">
-              <ul className="space-y-1.5 rounded-2xl bg-white p-3 shadow-card" aria-label="질문한 학생">
+              <ul className="space-y-1.5 rounded-2xl bg-white p-3 shadow-card" aria-label={`질문한 ${terms.student}`}>
                 {askers.map((s) => (
                   <li key={s.uid}>
                     <button type="button" onClick={() => setStudentUid(s.uid)} className={`flex min-h-touch w-full items-center justify-between rounded-xl px-3 font-semibold ${viewing.uid === s.uid ? 'bg-primary-900 text-white' : 'hover:bg-surface'}`}>

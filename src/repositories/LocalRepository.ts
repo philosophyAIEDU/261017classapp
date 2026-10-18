@@ -15,7 +15,7 @@ import type {
   TutorMessage,
   TutorRoom,
 } from '../types';
-import { appConfig } from '../config/appConfig';
+import { appConfig, terms } from '../config/appConfig';
 import { createId, generateClassCode, generateTempPassword, studentEmail } from '../utils/id';
 import {
   RepositoryError,
@@ -154,7 +154,7 @@ export class LocalRepository implements AppRepository {
     const db = this.read();
     let teacher = db.users.find((u) => u.role === 'teacher');
     if (!teacher) {
-      teacher = { uid: 'local-teacher', role: 'teacher', name: '담임 선생님', email: 'teacher@classapp.local', passwordHash: '' };
+      teacher = { uid: 'local-teacher', role: 'teacher', name: `담당 ${terms.teacher}`, email: 'teacher@classapp.local', passwordHash: '' };
       db.users.push(teacher);
       this.write(db);
     }
@@ -164,7 +164,7 @@ export class LocalRepository implements AppRepository {
   async signUpStudent(input: StudentSignUpInput): Promise<CurrentUser> {
     const db = this.read();
     const cls = db.classes.find((c) => c.code === input.classCode.trim().toUpperCase());
-    if (!cls) throw new RepositoryError('학급 코드를 다시 확인해 주세요.');
+    if (!cls) throw new RepositoryError(`${terms.code}를 다시 확인해 주세요.`);
     const email = studentEmail(cls.code, input.studentNo);
     if (db.users.some((u) => u.email === email)) {
       throw new RepositoryError('이미 가입한 번호예요. 로그인 화면에서 들어와 주세요.');
@@ -189,7 +189,7 @@ export class LocalRepository implements AppRepository {
     const email = studentEmail(input.classCode, input.studentNo);
     const user = db.users.find((u) => u.email === email);
     if (!user || user.passwordHash !== (await hashPassword(input.password))) {
-      throw new RepositoryError('학급 코드, 번호, 비밀번호를 다시 확인해 주세요.');
+      throw new RepositoryError(`${terms.code}, 번호, 비밀번호를 다시 확인해 주세요.`);
     }
     return this.startSession(db, user.uid);
   }
@@ -203,7 +203,7 @@ export class LocalRepository implements AppRepository {
     const cls = db.classes.find((c) => c.code === input.classCode.trim().toUpperCase());
     const member = cls && db.members.find((m) => m.classId === cls.id && m.studentNo === input.studentNo.trim());
     if (!member || member.name !== input.name.trim()) {
-      throw new RepositoryError('입력한 정보와 같은 학생을 찾지 못했어요.');
+      throw new RepositoryError(`입력한 정보와 같은 ${terms.student}을 찾지 못했어요.`);
     }
     member.resetRequested = true;
     this.write(db);
@@ -213,7 +213,7 @@ export class LocalRepository implements AppRepository {
     const db = this.read();
     const user = db.users.find((u) => u.uid === uid);
     const member = db.members.find((m) => m.classId === classId && m.uid === uid);
-    if (!user || !member) throw new RepositoryError('학생을 찾을 수 없어요.');
+    if (!user || !member) throw new RepositoryError(`${terms.student}을 찾을 수 없어요.`);
     const temp = generateTempPassword();
     user.passwordHash = await hashPassword(temp);
     member.resetRequested = false;
@@ -259,7 +259,7 @@ export class LocalRepository implements AppRepository {
       classId: cls.id,
       role: 'teacher',
       studentNo: '',
-      name: teacher?.name ?? '선생님',
+      name: teacher?.name ?? terms.teacher,
       approved: true,
       joinedAt: cls.createdAt,
     });

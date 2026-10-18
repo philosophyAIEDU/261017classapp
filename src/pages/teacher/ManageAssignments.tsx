@@ -8,7 +8,7 @@ import { BigButton } from '../../components/BigButton';
 import { Card } from '../../components/Card';
 import { PageHeader } from '../../components/PageHeader';
 import { EmptyState, InlineError, PageStatus } from '../../components/Status';
-import { appConfig } from '../../config/appConfig';
+import { appConfig, terms } from '../../config/appConfig';
 import { errorMessage, useAsync } from '../../hooks/useAsync';
 import { toneGuides } from '../../prompts/feedbackPrompt';
 import { rubricTemplates } from '../../prompts/rubricTemplates';
@@ -176,8 +176,8 @@ function AssignmentForm({ onSaved, onCancel }: { onSaved: () => void; onCancel: 
           <div className="grid gap-2 sm:grid-cols-2">
             {(
               [
-                ['instant', '즉시 공개', '학생이 내자마자 피드백을 봐요.'],
-                ['teacher', '교사 확인 후 공개', '선생님이 확인·수정한 뒤 공개해요.'],
+                ['instant', '즉시 공개', `${terms.student}이 내자마자 피드백을 봐요.`],
+                ['teacher', `${terms.teacher} 확인 후 공개`, `${terms.teacher}이 확인·수정한 뒤 공개해요.`],
               ] as const
             ).map(([value, label, desc]) => (
               <label key={value} className={`flex min-h-touch cursor-pointer gap-3 rounded-xl border-2 p-4 ${release === value ? 'border-primary-700 bg-primary-50' : 'border-primary-100'}`}>
@@ -219,7 +219,7 @@ export default function ManageAssignments() {
   }, [classId]);
 
   async function remove(a: Assignment) {
-    if (!window.confirm(`"${a.title}" 과제와 학생 제출물을 모두 지울까요? 되돌릴 수 없어요.`)) return;
+    if (!window.confirm(`"${a.title}" 과제와 ${terms.student} 제출물을 모두 지울까요? 되돌릴 수 없어요.`)) return;
     await repo.deleteAssignment(classId, a.id);
     state.reload();
   }

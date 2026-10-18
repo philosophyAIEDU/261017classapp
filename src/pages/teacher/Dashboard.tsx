@@ -66,7 +66,7 @@ export default function Dashboard() {
       <PageHeader
         icon={LayoutDashboard}
         title={`${classRoom?.name ?? ''} 대시보드`}
-        description={`${formatKstShort(new Date())} · ${terms.student} ${students.length}명 · 학급 코드 ${classRoom?.code ?? ''}`}
+        description={`${formatKstShort(new Date())} · ${terms.student} ${students.length}명 · ${terms.code} ${classRoom?.code ?? ''}`}
       />
 
       <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4">
@@ -85,7 +85,7 @@ export default function Dashboard() {
 
       <div className="grid gap-5 lg:grid-cols-2">
         {isModuleOn(classRoom, 'routines') && (
-          <Card title="오늘 아직 인증 안 한 학생" icon={AlertTriangle} action={<span className="chip bg-accent-100 text-accent-800">{missingToday.length}명</span>}>
+          <Card title={`오늘 아직 인증 안 한 ${terms.student}`} icon={AlertTriangle} action={<span className="chip bg-accent-100 text-accent-800">{missingToday.length}명</span>}>
             {todayRoutines.length === 0 ? (
               <EmptyState title="오늘은 루틴이 없는 날이에요" />
             ) : missingToday.length === 0 ? (

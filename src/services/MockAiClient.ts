@@ -20,6 +20,9 @@ export function buildMockFeedback(text: string, rubric: RubricCriterion[], minCh
   const paragraphs = text.split(/\n\s*\n/).filter((p) => p.trim()).length;
   const hasReason = /왜냐하면|때문|because|이유/.test(text);
   const hasExperience = /나도|내가|저도|제가|경험|I /.test(text);
+  const letters = text.replace(/[^A-Za-z가-힣]/g, '');
+  const isEnglish = letters.length > 0 && letters.replace(/[^A-Za-z]/g, '').length / letters.length > 0.6;
+  const hasLinkers = /\b(first|also|however|for example|in conclusion|so)\b/i.test(text);
 
   let base = 1;
   if (length >= minChars * 1.5 || paragraphs >= 3) base = 3;
@@ -31,11 +34,17 @@ export function buildMockFeedback(text: string, rubric: RubricCriterion[], minCh
     praise: opening
       ? `"${opening}"로 시작하는 첫 문장이 읽는 사람의 관심을 끌어요. ${hasReason ? '생각의 이유를 밝혀 쓴 점도 훌륭해요.' : '끝까지 성실하게 완성한 점이 멋져요.'}`
       : '과제를 끝까지 완성한 점이 멋져요.',
-    improvements: [
-      hasReason ? '이유 뒤에 구체적인 예시를 하나 더 붙이면 훨씬 설득력이 생겨요.' : '생각을 쓴 문장 뒤에 "왜냐하면"으로 이유를 덧붙여 보세요.',
-      paragraphs < 3 ? '처음·가운데·끝으로 문단을 나누면 글의 흐름이 더 잘 보여요.' : '문단과 문단을 잇는 연결어(그래서, 하지만)를 넣어 보세요.',
-      hasExperience ? '마지막 문단에서 앞으로의 다짐이나 바람을 한 문장으로 정리해 보세요.' : '나의 경험을 한 가지 떠올려 글과 연결해 보세요.',
-    ],
+    improvements: isEnglish
+      ? [
+          hasReason ? 'because 뒤에 For example 로 시작하는 예시 문장을 하나 더 붙여 보세요.' : '내 생각을 쓴 문장 뒤에 because 로 이유를 덧붙여 보세요.',
+          hasLinkers ? 'very, good 같은 쉬운 단어 하나를 더 정확한 단어(really, amazing)로 바꿔 보세요.' : 'First, Also, However 같은 연결어로 문장과 문장을 이어 보세요.',
+          '과거에 한 일은 과거형(went, ate, played)으로 썼는지 한 문장씩 확인해 보세요.',
+        ]
+      : [
+          hasReason ? '이유 뒤에 구체적인 예시를 하나 더 붙이면 훨씬 설득력이 생겨요.' : '생각을 쓴 문장 뒤에 "왜냐하면"으로 이유를 덧붙여 보세요.',
+          paragraphs < 3 ? '처음·가운데·끝으로 문단을 나누면 글의 흐름이 더 잘 보여요.' : '문단과 문단을 잇는 연결어(그래서, 하지만)를 넣어 보세요.',
+          hasExperience ? '마지막 문단에서 앞으로의 다짐이나 바람을 한 문장으로 정리해 보세요.' : '나의 경험을 한 가지 떠올려 글과 연결해 보세요.',
+        ],
     rubric: rubric.map((c, i) => {
       const level = Math.min(3, Math.max(1, base + (i === 1 && hasExperience ? 1 : 0) - (i === 2 && length < minChars ? 1 : 0)));
       return {
@@ -44,7 +53,9 @@ export function buildMockFeedback(text: string, rubric: RubricCriterion[], minCh
         comment: `"${c.levels[level - 1]}" 수준이에요. ${level < 3 ? `다음 단계: "${c.levels[level]}"에 도전해 봐요.` : '최고 단계예요!'}`,
       };
     }),
-    question: hasExperience
+    question: isEnglish
+      ? '이 글을 친구에게 소리 내어 읽어 준다면, 친구가 가장 먼저 물어볼 질문은 무엇일까요? 그 답을 영어 한 문장으로 더해 볼까요?'
+      : hasExperience
       ? '만약 친구가 정반대의 경험을 했다면, 그 친구는 이 글을 읽고 어떤 생각을 할까요?'
       : '이 글의 내용이 나의 일상과 어떻게 연결될 수 있을까요?',
   };
@@ -57,7 +68,7 @@ export function buildMockTutorReply(topic: string, message: string): string {
     return `그 이야기도 재미있겠지만, 지금은 "${topic}" 시간이야. 😊 오늘 배운 내용 중에 아직 헷갈리는 부분이 있니?`;
   }
   if (/답|알려줘|정답|식|뭐야|뭐예요/.test(message)) {
-    return `좋은 질문이야! 바로 답을 말해 주기보다 같이 생각해 보자. "${topic}"에서 꼭 필요한 재료나 조건을 하나씩 떠올려 볼래? 첫 번째 힌트는 교과서 그림 속에 있어.`;
+    return `좋은 질문이야! 바로 답을 말해 주기보다 같이 생각해 보자. "${topic}"에서 배운 규칙을 하나 떠올려 볼래? 그 규칙으로 짧은 예문을 하나 만들어 보면 첫 번째 힌트가 보일 거야.`;
   }
   if (/왜/.test(message)) {
     return '오, "왜"를 묻는 건 탐구의 시작이야! 네가 생각하는 이유를 먼저 한 가지 말해 줄래? 그다음에 그 생각이 맞는지 함께 확인해 보자.';

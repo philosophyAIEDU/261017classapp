@@ -9,6 +9,7 @@ import { Card } from '../../components/Card';
 import { PageHeader } from '../../components/PageHeader';
 import { EmptyState, ErrorState, InlineError, PageStatus } from '../../components/Status';
 import { errorMessage, useAsync } from '../../hooks/useAsync';
+import { terms } from '../../config/appConfig';
 import { repo } from '../../repositories';
 import { useSession } from '../../store/sessionStore';
 import type { AiFeedback, Assignment, Member, Submission } from '../../types';
@@ -140,7 +141,7 @@ function ReviewPanel({ assignment, student, submission, onSaved }: { assignment:
         )}
 
         <label className="block">
-          <span className="label">교사 코멘트 (학생에게 보여요)</span>
+          <span className="label">{terms.teacher} 코멘트 ({terms.student}에게 보여요)</span>
           <textarea className="input min-h-[90px]" value={comment} onChange={(e) => setComment(e.target.value)} placeholder="따뜻한 한마디를 남겨 주세요." />
         </label>
         <div className="flex flex-wrap gap-2">
@@ -160,7 +161,7 @@ function ReviewPanel({ assignment, student, submission, onSaved }: { assignment:
         <div className="flex flex-col gap-2 sm:flex-row">
           {!version.released && (
             <BigButton full variant="accent" icon={CheckCircle2} onClick={() => save(true)} loading={busy}>
-              승인하고 학생에게 공개
+              승인하고 {terms.student}에게 공개
             </BigButton>
           )}
           <BigButton full variant={version.released ? 'primary' : 'outline'} icon={Save} onClick={() => save(false)} loading={busy}>
@@ -200,9 +201,9 @@ export default function AssignmentReview() {
 
   return (
     <div className="space-y-5">
-      <PageHeader backTo="/teacher/assignments" icon={ClipboardCheck} title={assignment.title} description={`제출 ${submissions.length}/${students.length}명 · ${assignment.feedbackRelease === 'instant' ? '즉시 공개' : '교사 확인 후 공개'}`} />
+      <PageHeader backTo="/teacher/assignments" icon={ClipboardCheck} title={assignment.title} description={`제출 ${submissions.length}/${students.length}명 · ${assignment.feedbackRelease === 'instant' ? '즉시 공개' : `${terms.teacher} 확인 후 공개`}`} />
       <div className="grid gap-5 lg:grid-cols-[300px_1fr]">
-        <ul className="space-y-1.5 rounded-2xl bg-white p-3 shadow-card lg:max-h-[75vh] lg:overflow-y-auto" aria-label="학생 목록">
+        <ul className="space-y-1.5 rounded-2xl bg-white p-3 shadow-card lg:max-h-[75vh] lg:overflow-y-auto" aria-label={`${terms.student} 목록`}>
           {students.map((s) => {
             const sub = submissions.find((x) => x.uid === s.uid);
             const chip = !sub ? ['미제출', 'text-muted'] : sub.status === 'waiting' ? ['승인 대기', 'text-accent-700'] : [`공개 · ${sub.versions.length}회`, 'text-success'];
@@ -234,7 +235,7 @@ export default function AssignmentReview() {
             onSaved={(next) => setSubmissions((prev) => prev.map((s) => (s.id === next.id ? next : s)))}
           />
         ) : (
-          <EmptyState title="왼쪽에서 학생을 골라 주세요" />
+          <EmptyState title={`왼쪽에서 ${terms.student}을 골라 주세요`} />
         )}
       </div>
     </div>

@@ -2,6 +2,8 @@
 // 사용자가 "AI 설정"에 넣은 API 키와 모델은 요청 헤더로 함께 보냅니다.
 
 import { parseFeedback } from '../prompts/parseFeedback';
+import { terms } from '../config/appConfig';
+import { withJosa } from '../utils/josa';
 import type { AiFeedback } from '../types';
 import type { AiClient, FeedbackRequest, TutorRequest } from './aiClient';
 import { AiError } from './AiError';
@@ -21,7 +23,7 @@ export async function postFunction<T>(name: string, body: unknown, connection: A
   try {
     response = await fetch(`${BASE}/${name}`, { method: 'POST', headers, body: JSON.stringify(body) });
   } catch {
-    throw new AiError('AI 선생님과 연결이 안 돼요. 인터넷 연결을 확인해 주세요.');
+    throw new AiError(`${withJosa(terms.aiName, '과', '와')} 연결이 안 돼요. 인터넷 연결을 확인해 주세요.`);
   }
 
   let data: unknown = null;
@@ -37,7 +39,7 @@ export async function postFunction<T>(name: string, body: unknown, connection: A
     if (response.status === 404) {
       throw new AiError('AI 서버(Netlify Functions)가 켜져 있지 않아요. "netlify dev"로 실행했는지 확인해 주세요.');
     }
-    throw new AiError('AI 선생님이 잠깐 쉬고 있어요. 잠시 후 다시 시도해 주세요.');
+    throw new AiError('AI가 잠깐 쉬고 있어요. 잠시 후 다시 시도해 주세요.');
   }
   return obj as T;
 }

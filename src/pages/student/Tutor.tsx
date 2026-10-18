@@ -1,4 +1,4 @@
-// 이 화면이 하는 일: AI 탐구 튜터와 문답. 튜터는 정답 대신 힌트와 되묻기로 생각을 이끌어 줍니다.
+// 이 화면이 하는 일: AI 튜터와 문답. 튜터는 정답 대신 힌트와 되묻기로 생각을 이끌어 줍니다.
 // 고치기 좋은 부분: 하루 질문 횟수는 appConfig.ai.tutorDailyLimit, 튜터 규칙은 src/prompts/tutorPrompt.ts
 
 import { Bot, MessageCircleQuestion, Send } from 'lucide-react';
@@ -85,7 +85,7 @@ function ChatRoom({ room }: { room: TutorRoom }) {
       <div className="max-h-[55vh] min-h-[280px] space-y-3 overflow-y-auto px-4 py-5" aria-live="polite">
         {messages.length === 0 && (
           <p className="rounded-xl bg-primary-50 px-4 py-3 text-primary-900">
-            안녕! 나는 "{room.topic}" 탐구 튜터야. 궁금한 걸 물어봐. 정답 대신 생각할 힌트를 줄게. 🌱
+            안녕! 나는 "{room.topic}" 튜터야. 궁금한 걸 물어봐. 정답 대신 생각할 힌트를 줄게. 🌱
           </p>
         )}
         {messages.map((m) =>
@@ -146,7 +146,7 @@ export default function Tutor() {
   const [params, setParams] = useSearchParams();
   const state = useAsync(() => repo.listTutorRooms(classId), [classId]);
 
-  const header = <PageHeader icon={MessageCircleQuestion} title="AI 탐구 튜터" description="정답 대신 힌트로! 스스로 생각하는 힘을 길러요." />;
+  const header = <PageHeader icon={MessageCircleQuestion} title="AI 영어 튜터" description="정답 대신 힌트로! 스스로 문장을 만드는 힘을 길러요." />;
   if (!state.data) {
     return (
       <div>

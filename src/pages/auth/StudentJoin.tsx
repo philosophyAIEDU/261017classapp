@@ -45,7 +45,7 @@ export default function StudentJoin() {
   return (
     <AuthShell title={`${terms.room}에 가입하기`} description="이메일이나 전화번호는 필요 없어요.">
       <form onSubmit={handleSubmit} className="space-y-4">
-        <Field label="학급 코드 (6자리)">
+        <Field label={`${terms.code} (6자리)`}>
           <input className="input uppercase tracking-[0.3em]" value={classCode} onChange={(e) => setClassCode(e.target.value.toUpperCase())} maxLength={6} required autoComplete="off" />
         </Field>
         <div className="grid grid-cols-[110px_1fr] gap-3">

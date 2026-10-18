@@ -15,9 +15,9 @@ import { useSession } from '../../store/sessionStore';
 import type { Role } from '../../types';
 
 const features = [
-  { icon: BookOpenCheck, title: 'AI 첨삭 과제방', text: `${terms.teacher}의 루브릭으로 바로 받는 글쓰기 피드백` },
-  { icon: CalendarCheck, title: '학습 루틴 인증', text: '매일 한 칸씩 채우는 잔디 달력과 🔥 불꽃 배지' },
-  { icon: MessageCircleQuestion, title: 'AI 탐구 튜터', text: '정답 대신 힌트로, 스스로 생각하게 돕는 튜터' },
+  { icon: BookOpenCheck, title: 'AI 영작 첨삭', text: `${terms.teacher}의 루브릭으로 바로 받는 영작 피드백` },
+  { icon: CalendarCheck, title: '학습 루틴 인증', text: '단어·듣기·쉐도잉, 매일 채우는 잔디 달력과 🔥 배지' },
+  { icon: MessageCircleQuestion, title: 'AI 영어 튜터', text: '정답 대신 힌트로, 스스로 문장을 만들게 돕는 튜터' },
 ];
 
 export default function Landing() {
@@ -63,9 +63,10 @@ export default function Landing() {
               <Sparkles className="h-4 w-4" aria-hidden /> {appConfig.organization}
             </p>
             <h1 className="mt-4 text-[34px] font-extrabold leading-tight tracking-tight sm:text-5xl">
-              {terms.room}만의
+              {appConfig.heroTitle[0]}
               <br />
-              <span className="text-accent-300">AI 클래스</span>에 오신 걸 환영해요
+              <span className="text-accent-300">{appConfig.heroTitle[1]}</span>
+              {appConfig.heroTitle[2]}
             </h1>
             <p className="mt-4 text-lg text-primary-100 sm:text-xl">{appConfig.slogan}</p>
           </div>
@@ -80,7 +81,7 @@ export default function Landing() {
               <UserRound className="h-6 w-6" aria-hidden />
             </span>
             <h2 className="mt-4 text-xl font-extrabold text-primary-950">{terms.student}이에요</h2>
-            <p className="mt-1 text-muted">{terms.teacher}이 알려 준 학급 코드로 들어와요.</p>
+            <p className="mt-1 text-muted">{terms.teacher}이 알려 준 {terms.code}로 들어와요.</p>
             <div className="mt-6 grid gap-3">
               <BigButton full variant="accent" to="/login" icon={ChevronRight}>
                 로그인하기

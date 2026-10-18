@@ -49,7 +49,7 @@ export default function JoinQR() {
         <div className="mx-auto mt-8 inline-block rounded-2xl bg-white p-4 ring-4 ring-accent-300">
           <QRCodeSVG value={link} size={260} level="M" fgColor={appConfig.colors.primary[950]} title={`${classRoom.name} 입장 QR코드`} />
         </div>
-        <p className="mt-6 text-lg font-semibold text-muted">학급 코드</p>
+        <p className="mt-6 text-lg font-semibold text-muted">{terms.code}</p>
         <p className="font-mono text-5xl font-extrabold tracking-[0.25em] text-primary-950">{classRoom.code}</p>
         <ol className="mx-auto mt-8 max-w-md space-y-2 text-left">
           {STEPS.map((s, i) => (

@@ -11,6 +11,7 @@ import { ProgressBar } from '../../components/ProgressBar';
 import { EmptyState, ErrorState, PageStatus } from '../../components/Status';
 import { StreakBadge } from '../../components/StreakBadge';
 import { useAsync } from '../../hooks/useAsync';
+import { terms } from '../../config/appConfig';
 import { repo } from '../../repositories';
 import { useSession } from '../../store/sessionStore';
 import { formatKstDateTime, todayKst } from '../../utils/kstDate';
@@ -40,7 +41,7 @@ export default function StudentDetail() {
 
   if (!state.data) return <PageStatus {...state} onRetry={state.reload} />;
   const { member, assignments, submissions, routines, logs, messages, rooms } = state.data;
-  if (!member) return <ErrorState message="학생을 찾을 수 없어요." />;
+  if (!member) return <ErrorState message={`${terms.student}을 찾을 수 없어요.`} />;
   const questions = messages.filter((m) => m.role === 'student').slice(-RECENT_QUESTIONS).reverse();
 
   return (

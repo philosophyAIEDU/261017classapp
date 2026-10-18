@@ -7,7 +7,7 @@ import type { AiFeedback, RubricCriterion, RubricResult } from '../types';
 export const FALLBACK_FEEDBACK = {
   praise: '끝까지 글을 완성한 점이 정말 멋져요!',
   improvement: '한 문장씩 소리 내어 읽어 보고, 더 자세히 쓰고 싶은 부분을 찾아보세요.',
-  rubricComment: 'AI가 이 기준을 판단하지 못했어요. 선생님이 확인해 주실 거예요.',
+  rubricComment: 'AI가 이 기준을 판단하지 못했어요. 담당 선생님이 확인해 주실 거예요.',
   question: '이 글을 읽는 친구가 가장 궁금해할 점은 무엇일까요?',
 };
 

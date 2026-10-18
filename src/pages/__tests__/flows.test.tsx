@@ -18,13 +18,13 @@ async function renderAs(role: 'teacher' | 'student', path: string) {
 describe('화면 흐름', () => {
   it('학생은 교사 화면에 들어갈 수 없다', async () => {
     await renderAs('student', '/teacher');
-    expect(await screen.findByText('선생님만 볼 수 있는 화면이에요')).toBeInTheDocument();
+    expect(await screen.findByText('강사님만 볼 수 있는 화면이에요')).toBeInTheDocument();
     expect(screen.queryByText(/대시보드/)).not.toBeInTheDocument();
   });
 
   it('과제를 내면 AI 피드백 카드가 보인다', async () => {
     const user = userEvent.setup();
-    await renderAs('student', '/assignments/demo-a2'); // 김하늘이 아직 안 낸 논설문 (교사 확인 후 공개)
+    await renderAs('student', '/assignments/demo-a2'); // 김하늘이 아직 안 낸 영어 에세이 (강사 확인 후 공개)
     // 즉시 공개로 바꿔서 카드가 바로 보이게 합니다
     const a = await repo.getAssignment('demo-class', 'demo-a2');
     await repo.saveAssignment({ ...a!, feedbackRelease: 'instant' });
@@ -33,7 +33,7 @@ describe('화면 흐름', () => {
     const box = await screen.findByLabelText('내 글');
     const submit = screen.getByRole('button', { name: /제출하고 AI 피드백 받기/ });
     expect(submit).toBeDisabled(); // 글자 수 부족
-    await user.type(box, '나는 학교에서 스마트폰 사용을 제한해야 한다고 생각한다. 왜냐하면 수업 시간에 알림이 오면 집중이 깨지기 때문이다. '.repeat(3));
+    await user.type(box, 'I think phones should stay in our bags during class, because notifications break our focus. '.repeat(3));
     await user.click(submit);
     expect(await screen.findByText(/글을 읽고 있어요/)).toBeInTheDocument();
     expect(await screen.findByLabelText('AI 피드백', {}, { timeout: 4000 })).toBeInTheDocument();

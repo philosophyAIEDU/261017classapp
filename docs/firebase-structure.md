@@ -27,7 +27,7 @@ classes/{classId}            # name, code, teacherUid, mode, enabledModules, cre
 
 ## 학생 로그인
 
-- 학생은 실제 이메일 없이 **학급 코드 + 번호 + 이름 + 비밀번호**로 가입합니다.
+- 학생은 실제 이메일 없이 **클래스 코드 + 번호 + 이름 + 비밀번호**로 가입합니다.
 - 내부적으로는 합성 이메일 `{학급코드}-{번호}@classapp.local`로 Firebase 이메일 인증을 씁니다. (`src/utils/id.ts`의 `studentEmail`)
 - 교사가 승인(`members/{uid}.approved = true`)해야 활성화됩니다.
 

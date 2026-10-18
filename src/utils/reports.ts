@@ -1,12 +1,13 @@
 // 교사용 CSV 표 만들기 (과제 제출 현황 / 루틴 현황)
 
 import type { Assignment, KstDate, Member, Routine, RoutineLog, Submission } from '../types';
+import { terms } from '../config/appConfig';
 import { datesBetween, formatKstDateTime } from './kstDate';
 import { achievementRate, isRoutineDay } from './stats';
 import { latestVersion } from './submissions';
 
 export function assignmentReportRows(students: Member[], assignments: Assignment[], submissions: Submission[]): (string | number)[][] {
-  const rows: (string | number)[][] = [['번호', '이름', '과제', '상태', '제출 횟수', '마지막 제출', '루브릭 단계(마지막 글)', '교사 코멘트']];
+  const rows: (string | number)[][] = [['번호', '이름', '과제', '상태', '제출 횟수', '마지막 제출', '루브릭 단계(마지막 글)', `${terms.teacher} 코멘트`]];
   for (const a of assignments) {
     for (const s of students) {
       const sub = submissions.find((x) => x.assignmentId === a.id && x.uid === s.uid);

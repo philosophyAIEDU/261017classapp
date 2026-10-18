@@ -12,18 +12,19 @@
 
 ### 앱 이름과 문구
 ```ts
-appName: '우리반 AI 클래스',          // 화면 왼쪽 위와 브라우저 탭에 보이는 이름
-organization: '필로소피 초등학교',     // 첫 화면과 QR 인쇄물에 보이는 기관 이름
-slogan: 'AI 선생님과 함께 쓰고, 묻고, 꾸준히 자라요',
+appName: 'AI 영어 클래스',               // 화면 왼쪽 위와 브라우저 탭에 보이는 이름
+organization: '레인보우 어학원',          // 첫 화면과 QR 인쇄물에 보이는 기관 이름
+slogan: 'AI 코치와 함께 쓰고, 말하고, 매일 조금씩 늘어요',
+heroTitle: ['영어로 쓰고 묻는', '나만의 AI 클래스', '에 오신 걸 환영해요'],  // 첫 화면 큰 제목 (가운데가 골드색)
 ```
 
-### 대상 모드 — 학교? 학원·강의?
+### 대상 모드 — 어학원·학원? 학교?
 ```ts
-mode: 'school' as TargetMode,   // 'school' 또는 'academy'
+mode: 'academy' as TargetMode,   // 'academy'(어학원·학원, 지금 설정) 또는 'school'(학교)
 ```
 | `school` | `academy` |
 | --- | --- |
-| 우리 반 · 학생 · 선생님 · AI 선생님 | 강의실 · 수강생 · 강사님 · AI 코치 |
+| 우리 반 · 학급 코드 · 학생 · 선생님 · AI 선생님 | 우리 클래스 · 클래스 코드 · 수강생 · 강사님 · AI 코치 |
 
 ### 켜고 끌 기능
 ```ts
@@ -53,7 +54,7 @@ ai: {
   tutorDailyLimit: 20,                     // 학생 1명이 하루에 튜터에게 질문할 수 있는 횟수
   maxInputChars: 4000,                     // AI에게 보낼 수 있는 최대 글자 수
   defaultFeedbackTone: 'coach',            // 'coach' 다정한 코치 / 'editor' 꼼꼼한 편집자
-  defaultTutorPersona: '친절하고 호기심 많은 탐구 선배',
+  defaultTutorPersona: '친절하고 차분한 영어 코치',
 },
 ```
 
@@ -67,25 +68,25 @@ ai: {
 
 | 파일 | 고칠 수 있는 것 |
 | --- | --- |
-| `rubricTemplates.ts` | 과제 만들 때 고르는 **루브릭 예시 4종** (독서록·논설문·영작·과학 탐구 보고서). 우리 과목 템플릿을 추가해도 돼요 |
+| `rubricTemplates.ts` | 과제 만들 때 고르는 **루브릭 예시 4종** (영어 일기·영어 에세이·스피치 원고·영어 독후감). 우리 수업 템플릿을 추가해도 돼요 |
 | `feedbackPrompt.ts` | AI 피드백 **말투 설명** (`toneGuides`) |
-| `tutorPrompt.ts` | 튜터 방 만들 때 고르는 **튜터 성격 예시** (`personaPresets`) |
+| `tutorPrompt.ts` | 튜터 방 만들 때 고르는 **튜터 성격 예시** (`personaPresets`). 영어 수업용 규칙(설명은 한국어, 예문은 짧게, 작문 대신 써 주지 않기)도 들어 있어요 |
 | `parseFeedback.ts` | AI 응답이 이상할 때 대신 보여 줄 **기본 문구** (`FALLBACK_FEEDBACK`) |
 
 ### 루브릭 템플릿 추가 예시
 `rubricTemplates` 목록 맨 끝 `];` 바로 위에 아래 덩어리를 붙여 넣고 내용만 바꾸세요.
 ```ts
   {
-    id: 'poem',
-    label: '시 쓰기',
-    emoji: '🌸',
-    suggestedTitle: '계절을 담은 시',
-    suggestedPrompt: '요즘 계절에 본 장면을 떠올려 시를 써 보세요.',
-    minChars: 50,
-    maxChars: 400,
+    id: 'email',
+    label: '영어 이메일',
+    emoji: '📧',
+    suggestedTitle: 'Email to a Pen Pal',
+    suggestedPrompt: '외국 친구에게 나를 소개하는 짧은 영어 이메일을 써 보세요.',
+    minChars: 100,
+    maxChars: 800,
     rubric: [
-      { name: '감각적 표현', levels: ['설명하듯 씀', '감각 표현이 있음', '여러 감각을 생생하게 씀'] },
-      { name: '비유', levels: ['비유가 없음', '비유를 한 번 씀', '비유로 새로운 느낌을 줌'] },
+      { name: '형식', levels: ['인사·맺음말이 없음', '인사와 맺음말이 있음', 'Dear ~, Best regards 등 형식이 자연스러움'] },
+      { name: '질문하기', levels: ['질문이 없음', '질문을 하나 함', '친구의 답을 끌어내는 질문을 여러 개 함'] },
     ],
   },
 ```
@@ -98,7 +99,7 @@ ai: {
 | 파일 | 내용 |
 | --- | --- |
 | `src/config/aiModels.ts` | 고를 수 있는 Gemini 모델 목록 |
-| `src/repositories/sampleData.ts` | 데모용 학생 이름·샘플 글 (`STUDENT_NAMES`, `READING_TEXTS`, `ARGUMENT_TEXTS`) |
+| `src/repositories/sampleData.ts` | 데모용 수강생 이름·샘플 글 (`STUDENT_NAMES`, `DIARY_TEXTS`, `OPINION_TEXTS`) |
 | `src/pages/…/*.tsx` | 각 화면. 파일 맨 위에 "이 화면이 하는 일 / 고치기 좋은 부분"이 적혀 있어요 |
 | `.env` (`.env.example` 복사) | 데모 모드 켜기·끄기 등. 배포 주소에서는 Netlify 환경변수로 넣어요 |
 

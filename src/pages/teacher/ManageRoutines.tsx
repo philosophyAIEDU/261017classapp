@@ -18,7 +18,7 @@ import { addDaysKst, datesBetween, formatMonthDay, todayKst } from '../../utils/
 import { describeDays, isRoutineDay, percent } from '../../utils/stats';
 
 const GRID_DAYS = 14;
-const EXAMPLES = ['영단어 20개 외우기', '수학 오답노트 1문제', '독서 15분'];
+const EXAMPLES = ['영단어 20개 외우기', '듣기·쉐도잉 15분', '영어 일기 3문장'];
 const DAY_NAMES = ['일', '월', '화', '수', '목', '금', '토'];
 
 function RoutineForm({ onSaved, onCancel }: { onSaved: () => void; onCancel: () => void }) {

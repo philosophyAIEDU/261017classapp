@@ -53,7 +53,7 @@ export default function Members() {
 
       <Card title="가입 승인 대기" action={<span className="chip bg-accent-100 text-accent-800">{pending.length}명</span>}>
         {pending.length === 0 ? (
-          <EmptyState title="기다리는 학생이 없어요" />
+          <EmptyState title={`기다리는 ${terms.student}이 없어요`} />
         ) : (
           <ul className="space-y-2">
             {pending.map((m) => (
@@ -99,7 +99,7 @@ export default function Members() {
             ))}
           </ul>
         )}
-        <p className="mt-3 text-[15px] text-muted">임시 비밀번호는 이 화면에서 한 번만 보여요. 학생에게 직접 알려 주세요.</p>
+        <p className="mt-3 text-[15px] text-muted">임시 비밀번호는 이 화면에서 한 번만 보여요. {terms.student}에게 직접 알려 주세요.</p>
       </Card>
 
       <Card title={`${terms.student} 목록`} action={<span className="chip bg-primary-50 text-primary-800">{approved.length}명</span>}>
@@ -119,7 +119,7 @@ export default function Members() {
                 </Link>
                 <button
                   type="button"
-                  onClick={() => window.confirm(`${m.name}을(를) 학급에서 내보낼까요?`) && run(() => repo.removeMember(classId, m.uid))}
+                  onClick={() => window.confirm(`${m.name}을(를) ${terms.group}에서 내보낼까요?`) && run(() => repo.removeMember(classId, m.uid))}
                   className="grid h-12 w-12 place-items-center text-primary-300 hover:text-danger"
                   aria-label={`${m.name} 내보내기`}
                 >

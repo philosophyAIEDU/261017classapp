@@ -54,7 +54,7 @@ export default function StudentLogin() {
 
   const codeAndNo = (
     <>
-      <Field label="학급 코드 (6자리)">
+      <Field label={`${terms.code} (6자리)`}>
         <input className="input uppercase tracking-[0.3em]" value={classCode} onChange={(e) => setClassCode(e.target.value.toUpperCase())} maxLength={6} required autoComplete="off" />
       </Field>
       <Field label="번호">
@@ -101,7 +101,7 @@ export default function StudentLogin() {
         </Field>
         {env.demoMode && env.dataMode === 'local' && (
           <p className="rounded-xl bg-accent-50 px-4 py-3 text-[15px] text-accent-800">
-            체험용: 학급 코드 <b>DEMO26</b> · 번호 <b>1</b> · 비밀번호 <b>1234</b>
+            체험용: {terms.code} <b>DEMO26</b> · 번호 <b>1</b> · 비밀번호 <b>1234</b>
           </p>
         )}
         <InlineError message={error} />

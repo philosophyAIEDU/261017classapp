@@ -6,20 +6,22 @@ export type TargetMode = 'school' | 'academy';
 
 export const appConfig = {
   // ── 1. 기본 정보 ─────────────────────────────
-  appName: '우리반 AI 클래스',
-  organization: '필로소피 초등학교',
-  slogan: 'AI 선생님과 함께 쓰고, 묻고, 꾸준히 자라요',
+  appName: 'AI 영어 클래스',
+  organization: '레인보우 어학원',
+  slogan: 'AI 코치와 함께 쓰고, 말하고, 매일 조금씩 늘어요',
+  // 첫 화면 큰 제목 (두 번째 줄 앞부분은 골드색으로 강조돼요)
+  heroTitle: ['영어로 쓰고 묻는', '나만의 AI 클래스', '에 오신 걸 환영해요'] as [string, string, string],
 
   // ── 2. 대상 모드 ─────────────────────────────
   // 'school'  → 우리 반 · 학생 · 선생님
-  // 'academy' → 강의실 · 수강생 · 강사님
-  mode: 'school' as TargetMode,
+  // 'academy' → 우리 클래스 · 수강생 · 강사님
+  mode: 'academy' as TargetMode,
 
   // ── 3. 켜고 끌 기능 (true = 켜기, false = 끄기) ──
   modules: {
-    assignments: true, // ① AI 첨삭 과제방
-    routines: true, // ② 학습 루틴 인증
-    tutor: true, // ③ AI 탐구 튜터
+    assignments: true, // ① AI 첨삭 과제방 (영작 첨삭)
+    routines: true, // ② 학습 루틴 인증 (단어·듣기·쉐도잉)
+    tutor: true, // ③ AI 튜터 (문법·표현 질문)
   },
 
   // ── 4. 색상 (#으로 시작하는 색상 코드) ──────────
@@ -68,7 +70,7 @@ export const appConfig = {
     tutorDailyLimit: 20, // 학생 1명이 하루에 튜터에게 질문할 수 있는 횟수
     maxInputChars: 4000, // AI에게 보낼 수 있는 최대 글자 수
     defaultFeedbackTone: 'coach' as 'coach' | 'editor', // coach = 다정한 코치, editor = 꼼꼼한 편집자
-    defaultTutorPersona: '친절하고 호기심 많은 탐구 선배',
+    defaultTutorPersona: '친절하고 차분한 영어 코치',
   },
 };
 
@@ -76,18 +78,18 @@ export const appConfig = {
 const termsByMode = {
   school: {
     room: '우리 반',
-    group: '학급',
+    group: '학급', // '학급 코드', '학급 만들기' 처럼 쓰여요
     student: '학생',
     teacher: '선생님',
     aiName: 'AI 선생님',
   },
   academy: {
-    room: '강의실',
-    group: '강의',
+    room: '우리 클래스',
+    group: '클래스',
     student: '수강생',
     teacher: '강사님',
     aiName: 'AI 코치',
   },
 };
 
-export const terms = termsByMode[appConfig.mode];
+export const terms = { ...termsByMode[appConfig.mode], code: `${termsByMode[appConfig.mode].group} 코드` };
