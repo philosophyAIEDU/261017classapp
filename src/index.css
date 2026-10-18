@@ -46,30 +46,51 @@
   }
 }
 
-/* Soft stationery colors with a colored-pencil rainbow illustration. */
-.landing-hero { background: linear-gradient(115deg, #f3edf9 0%, #fff5eb 60%, #edf7f1 100%); }
-.landing-rainbow { display: block; width: min(88%, 400px); margin: 12px auto -12px; mix-blend-mode: multiply; }
-.entry-card { transition: box-shadow 180ms ease; }
-.entry-card:hover { box-shadow: 0 12px 32px -16px #ad91b866; }
-.feature-cards > li:nth-child(1) { background: #f2edf9; }
-.feature-cards > li:nth-child(2) { background: #edf7f1; }
-.feature-cards > li:nth-child(3) { background: #fff0e7; }
-.dashboard-welcome { position: relative; overflow: hidden; border: 1px solid #ece2f1; border-radius: 28px; padding: 28px; background: linear-gradient(115deg, #f4eefb, #fff6ed 70%, #eff8f2); }
-.dashboard-rainbow { display: block; width: 220px; margin: 8px auto -20px; mix-blend-mode: multiply; }
-.dashboard-tiles > li:nth-child(1) .summary-tile { background: #f0eafa; }
-.dashboard-tiles > li:nth-child(2) .summary-tile { background: #eaf5ee; }
-.dashboard-tiles > li:nth-child(3) .summary-tile { background: #fff0e6; }
-.dashboard-tiles > li:nth-child(4) .summary-tile { background: #edf3fb; }
-.summary-tile { transition: box-shadow 180ms ease; }
+/* Editorial learning experience: warm paper, restrained lavender, pencil artwork. */
+.landing-header { background: #fffcf7; border-bottom: 1px solid #eee8e3; }
+.landing-hero { background: linear-gradient(125deg, #faf7fc, #fffcf7 60%, #f4f8f2); border-bottom: 1px solid #eee8e3; }
+.hero-layout { display: grid; gap: 24px; padding-top: 44px; padding-bottom: 44px; align-items: center; }
+.hero-eyebrow { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #7d5b9d; }
+.hero-title { margin-top: 20px; font-size: clamp(30px, 4vw, 46px); font-weight: 800; line-height: 1.35; letter-spacing: -.045em; }
+.hero-title span { color: #7d5b9d; }
+.hero-description { margin-top: 20px; font-size: 17px; line-height: 1.9; color: #706677; }
+.hero-subjects { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-top: 26px; font-size: 12px; font-weight: 600; color: #706677; }
+.hero-subjects span + span { border-left: 1px solid #d9d0e0; padding-left: 16px; }
+.hero-artwork { min-width: 0; margin: 0; }
+.hero-artwork img { width: 100%; height: auto; border-radius: 24px; mix-blend-mode: multiply; }
+.hero-artwork figcaption { margin-top: 8px; text-align: center; font-size: 12px; color: #706677; letter-spacing: .03em; }
+.hero-artwork figcaption span { color: #ad6240; margin-right: 6px; }
+.landing-content { padding-top: 32px; }
+.entry-card { position: relative; border-radius: 22px; transition: box-shadow 180ms ease, border-color 180ms ease; }
+.entry-card:hover { border-color: #c8b5e1; box-shadow: 0 12px 36px -20px #795b9970; }
+.entry-card h2 { letter-spacing: -.025em; }
+.entry-card > span { border: 1px solid #eee3d8; }
+.learning-section-heading { margin: 56px 0 24px; }
+.feature-cards > li { border: 1px solid #ece6ef; border-radius: 20px; box-shadow: none; padding: 26px; }
+.feature-cards > li:nth-child(1) { background: #f5f1fa; }
+.feature-cards > li:nth-child(2) { background: #f0f6f2; }
+.feature-cards > li:nth-child(3) { background: #fbf2eb; }
+.feature-cards > li:nth-child(2) > svg { color: #547d66; }
+.landing-footer { padding: 24px 24px 40px; border-top: 1px solid #eee8e3; text-align: center; font-size: 12px; color: #706677; }
+.dashboard-welcome { position: relative; overflow: hidden; border: 1px solid #e9e1ee; border-radius: 24px; padding: 28px; background: linear-gradient(115deg, #f6f2fa, #fffcf7 75%); }
+.dashboard-rainbow { display: block; width: 260px; margin: 12px auto 0; mix-blend-mode: multiply; }
+.dashboard-welcome .mb-6 { margin-bottom: 0; }
+.dashboard-tiles > li:nth-child(1) .summary-tile { background: #f5f1fa; }
+.dashboard-tiles > li:nth-child(2) .summary-tile { background: #f0f6f2; }
+.dashboard-tiles > li:nth-child(3) .summary-tile { background: #fbf2eb; }
+.dashboard-tiles > li:nth-child(4) .summary-tile { background: #f0f4fa; }
+.summary-tile { border-color: #ece6ef; transition: box-shadow 180ms ease; }
+.app-header nav a { font-size: 15px; }
 @media (min-width: 768px) {
-  .landing-hero > .relative { min-height: 365px; }
-  .landing-hero h1 { max-width: 650px; font-size: 42px; }
-  .landing-rainbow { position: absolute; right: -28px; bottom: -28px; width: 330px; margin: 0; }
-  .landing-hero .max-w-2xl { max-width: 65%; }
-  .dashboard-welcome { min-height: 190px; display: flex; align-items: center; }
-  .dashboard-welcome > div { max-width: 72%; }
-  .dashboard-rainbow { position: absolute; right: 10px; bottom: -5px; width: 260px; margin: 0; }
+  .hero-layout { grid-template-columns: 1.05fr 1fr; gap: 24px; padding-top: 60px; padding-bottom: 64px; }
+  .hero-description { font-size: 16px; }
+  .dashboard-welcome { min-height: 200px; display: flex; align-items: center; padding: 32px; }
+  .dashboard-welcome > div { max-width: 68%; }
+  .dashboard-rainbow { position: absolute; right: 20px; bottom: 8px; width: 280px; margin: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .entry-card, .summary-tile { transition: none; }
 }
 @media print {
-  .landing-rainbow, .dashboard-rainbow { display: none; }
+  .hero-artwork, .dashboard-rainbow { display: none; }
 }
