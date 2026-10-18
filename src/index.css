@@ -45,3 +45,31 @@
     break-inside: avoid;
   }
 }
+
+/* Soft stationery colors with a colored-pencil rainbow illustration. */
+.landing-hero { background: linear-gradient(115deg, #f3edf9 0%, #fff5eb 60%, #edf7f1 100%); }
+.landing-rainbow { display: block; width: min(88%, 400px); margin: 12px auto -12px; mix-blend-mode: multiply; }
+.entry-card { transition: box-shadow 180ms ease; }
+.entry-card:hover { box-shadow: 0 12px 32px -16px #ad91b866; }
+.feature-cards > li:nth-child(1) { background: #f2edf9; }
+.feature-cards > li:nth-child(2) { background: #edf7f1; }
+.feature-cards > li:nth-child(3) { background: #fff0e7; }
+.dashboard-welcome { position: relative; overflow: hidden; border: 1px solid #ece2f1; border-radius: 28px; padding: 28px; background: linear-gradient(115deg, #f4eefb, #fff6ed 70%, #eff8f2); }
+.dashboard-rainbow { display: block; width: 220px; margin: 8px auto -20px; mix-blend-mode: multiply; }
+.dashboard-tiles > li:nth-child(1) .summary-tile { background: #f0eafa; }
+.dashboard-tiles > li:nth-child(2) .summary-tile { background: #eaf5ee; }
+.dashboard-tiles > li:nth-child(3) .summary-tile { background: #fff0e6; }
+.dashboard-tiles > li:nth-child(4) .summary-tile { background: #edf3fb; }
+.summary-tile { transition: box-shadow 180ms ease; }
+@media (min-width: 768px) {
+  .landing-hero > .relative { min-height: 365px; }
+  .landing-hero h1 { max-width: 650px; font-size: 42px; }
+  .landing-rainbow { position: absolute; right: -28px; bottom: -28px; width: 330px; margin: 0; }
+  .landing-hero .max-w-2xl { max-width: 65%; }
+  .dashboard-welcome { min-height: 190px; display: flex; align-items: center; }
+  .dashboard-welcome > div { max-width: 72%; }
+  .dashboard-rainbow { position: absolute; right: 10px; bottom: -5px; width: 260px; margin: 0; }
+}
+@media print {
+  .landing-rainbow, .dashboard-rainbow { display: none; }
+}

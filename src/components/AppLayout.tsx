@@ -92,7 +92,7 @@ export function AppLayout() {
               end={item.end}
               className={({ isActive }) =>
                 `flex min-h-touch shrink-0 items-center gap-2 rounded-xl px-4 font-semibold transition-colors ${
-                  isActive ? 'bg-primary-900 text-white' : 'text-primary-800 hover:bg-primary-50'
+                  isActive ? 'bg-primary-100 text-primary-900 shadow-sm' : 'text-primary-800 hover:bg-primary-50'
                 }`
               }
             >

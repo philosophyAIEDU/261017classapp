@@ -13,7 +13,7 @@ interface CardProps {
 
 export function Card({ title, icon: Icon, action, children, className = '' }: CardProps) {
   return (
-    <section className={`print-break rounded-2xl bg-white p-5 shadow-card sm:p-6 ${className}`}>
+    <section className={`print-break rounded-3xl border border-primary-100/60 bg-white p-5 shadow-card sm:p-6 ${className}`}>
       {(title || action) && (
         <header className="mb-4 flex items-center justify-between gap-3">
           <h2 className="flex items-center gap-2 text-lg font-bold text-primary-900">

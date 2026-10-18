@@ -67,7 +67,7 @@ export function DemoBar() {
         disabled={busy}
         onClick={() => switchTo(role)}
         aria-pressed={active}
-        className={`min-h-touch whitespace-nowrap rounded-lg px-3 text-[15px] font-bold transition-colors ${active ? 'bg-accent-400 text-primary-950' : 'text-white hover:bg-white/10'}`}
+        className={`min-h-touch whitespace-nowrap rounded-lg px-3 text-[15px] font-bold transition-colors ${active ? 'bg-accent-400 text-primary-950' : 'text-primary-700 hover:bg-white/60'}`}
       >
         {label}
       </button>
@@ -75,9 +75,9 @@ export function DemoBar() {
   };
 
   return (
-    <div className="no-print bg-primary-950 text-white">
+    <div className="no-print border-b border-primary-100 bg-primary-50 text-primary-900">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-1.5">
-        <span className="hidden text-[14px] font-semibold text-primary-200 sm:inline">체험용 데모</span>
+        <span className="hidden text-[14px] font-semibold text-primary-700 sm:inline">체험용 데모</span>
         <div className="flex items-center gap-1 rounded-xl bg-white/5 p-1">
           {tab('teacher', `${terms.teacher}으로 보기`)}
           {tab('student', `${terms.student}으로 보기`)}
@@ -86,7 +86,7 @@ export function DemoBar() {
           type="button"
           onClick={reset}
           disabled={busy}
-          className="flex min-h-touch items-center gap-1 rounded-lg px-2 text-[14px] font-semibold text-primary-200 hover:text-white"
+          className="flex min-h-touch items-center gap-1 rounded-lg px-2 text-[14px] font-semibold text-primary-700 hover:text-primary-950"
         >
           <RotateCcw className="h-4 w-4" aria-hidden /> <span className="sr-only sm:not-sr-only">샘플 초기화</span>
         </button>
