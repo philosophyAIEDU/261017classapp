@@ -62,7 +62,7 @@ export function AppLayout() {
   return (
     <div className="min-h-screen pb-28 sm:pb-12">
       <DemoBar />
-      <header className="no-print sticky top-0 z-20 border-b border-primary-100 bg-white/95 backdrop-blur">
+      <header className="app-header no-print sticky top-0 z-20 border-b border-primary-100 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5">
           <NavLink to={isTeacher ? '/teacher' : '/home'} className="min-w-0">
             <Logo />

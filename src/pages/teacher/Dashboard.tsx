@@ -72,7 +72,7 @@ export default function Dashboard() {
         description={`${formatKstShort(new Date())} · ${terms.student} ${students.length}명 · ${terms.code} ${classRoom?.code ?? ''}`}
       />
         </div>
-        <img src="/rainbow-pencil.png" alt="색연필로 그린 파스텔 무지개" className="dashboard-rainbow" />
+        <img src="/english-learning-pencil.png" alt="아이들이 즐겁게 함께 영어를 공부하는 색연필 그림" className="dashboard-rainbow" />
       </section>
 
       <ul className="dashboard-tiles grid grid-cols-2 gap-3 lg:grid-cols-4">
