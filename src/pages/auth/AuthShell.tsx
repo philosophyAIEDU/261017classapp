@@ -7,10 +7,10 @@ import { Logo, ModeBadge } from '../../components/AppChrome';
 export function AuthShell({ title, description, children }: { title: string; description?: string; children: ReactNode }) {
   return (
     <div className="min-h-screen bg-surface">
-      <div className="bg-primary-900 px-5 pb-24 pt-6">
+      <div className="bg-primary-100 px-5 pb-24 pt-6">
         <div className="mx-auto max-w-md">
           <Link to="/" aria-label="첫 화면으로">
-            <Logo light />
+            <Logo />
           </Link>
         </div>
       </div>

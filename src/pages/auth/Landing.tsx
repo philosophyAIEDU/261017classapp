@@ -52,31 +52,32 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-surface">
-      {/* 위쪽 네이비 영역 */}
-      <div className="relative overflow-hidden bg-primary-900 pb-36 text-white">
+      {/* 파스텔 색연필 무지개 영역 */}
+      <div className="landing-hero relative overflow-hidden pb-36 text-primary-950">
         <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-accent-400/20 blur-3xl" aria-hidden />
         <div className="pointer-events-none absolute -bottom-32 -left-20 h-80 w-80 rounded-full bg-primary-500/40 blur-3xl" aria-hidden />
         <div className="relative mx-auto max-w-5xl px-5 pt-6">
-          <Logo light />
-          <div className="mt-12 max-w-2xl sm:mt-16">
-            <p className="chip bg-white/10 text-accent-200">
+          <Logo />
+          <div className="relative z-10 mt-10 max-w-2xl sm:mt-16">
+            <p className="chip border border-primary-100 bg-white/80 text-primary-700">
               <Sparkles className="h-4 w-4" aria-hidden /> {appConfig.organization}
             </p>
             <h1 className="mt-4 text-[34px] font-extrabold leading-tight tracking-tight sm:text-5xl">
               {appConfig.heroTitle[0]}
               <br />
-              <span className="text-accent-300">{appConfig.heroTitle[1]}</span>
+              <span className="text-primary-600">{appConfig.heroTitle[1]}</span>
               {appConfig.heroTitle[2]}
             </h1>
-            <p className="mt-4 text-lg text-primary-100 sm:text-xl">{appConfig.slogan}</p>
+            <p className="mt-4 max-w-lg text-lg text-muted sm:text-xl">{appConfig.slogan}</p>
           </div>
+          <img src="/rainbow-pencil.png" alt="색연필로 그린 파스텔 무지개와 구름" className="landing-rainbow" fetchPriority="high" />
         </div>
       </div>
 
       {/* 입장 카드 */}
       <div className="relative mx-auto -mt-28 max-w-5xl px-5">
         <div className="grid gap-4 md:grid-cols-2">
-          <section className="rounded-3xl bg-white p-6 shadow-card sm:p-8">
+          <section className="entry-card rounded-3xl border border-primary-100/70 bg-white p-6 shadow-card sm:p-8">
             <span className="grid h-12 w-12 place-items-center rounded-2xl bg-accent-100 text-accent-800">
               <UserRound className="h-6 w-6" aria-hidden />
             </span>
@@ -92,7 +93,7 @@ export default function Landing() {
             </div>
           </section>
 
-          <section className="rounded-3xl bg-white p-6 shadow-card sm:p-8">
+          <section className="entry-card rounded-3xl border border-primary-100/70 bg-white p-6 shadow-card sm:p-8">
             <span className="grid h-12 w-12 place-items-center rounded-2xl bg-primary-50 text-primary-800">
               <ShieldCheck className="h-6 w-6" aria-hidden />
             </span>
@@ -123,7 +124,7 @@ export default function Landing() {
           </section>
         )}
 
-        <ul className="mt-10 grid gap-4 pb-16 sm:grid-cols-3">
+        <ul className="feature-cards mt-10 grid gap-4 pb-16 sm:grid-cols-3">
           {features.map((f) => (
             <li key={f.title} className="rounded-2xl bg-white p-5 shadow-card">
               <f.icon className="h-7 w-7 text-accent-500" aria-hidden />

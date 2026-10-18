@@ -63,16 +63,22 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
+      <section className="dashboard-welcome">
+        <div className="relative z-10">
+          <p className="mb-3 text-sm font-bold tracking-wide text-primary-600">함께 배우고, 매일 조금씩 자라는 {terms.room}</p>
       <PageHeader
         icon={LayoutDashboard}
         title={`${classRoom?.name ?? ''} 대시보드`}
         description={`${formatKstShort(new Date())} · ${terms.student} ${students.length}명 · ${terms.code} ${classRoom?.code ?? ''}`}
       />
+        </div>
+        <img src="/rainbow-pencil.png" alt="색연필로 그린 파스텔 무지개" className="dashboard-rainbow" />
+      </section>
 
-      <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <ul className="dashboard-tiles grid grid-cols-2 gap-3 lg:grid-cols-4">
         {tiles.map((t) => (
           <li key={t.label}>
-            <Link to={t.to} className="block h-full rounded-2xl bg-white p-5 shadow-card hover:ring-2 hover:ring-primary-200">
+            <Link to={t.to} className="summary-tile block h-full rounded-2xl border border-white p-5 shadow-card hover:ring-2 hover:ring-primary-200">
               <span className={`grid h-10 w-10 place-items-center rounded-xl ${t.alert ? 'bg-accent-400 text-primary-950' : 'bg-primary-50 text-primary-700'}`}>
                 <t.icon className="h-5 w-5" aria-hidden />
               </span>
