@@ -1,6 +1,6 @@
 // 화면 테두리 요소: 데모 전환 막대, 모드 배지, 로고
 
-import { GraduationCap, RotateCcw } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { appConfig, terms } from '../config/appConfig';
@@ -13,10 +13,10 @@ import type { Role } from '../types';
 export function Logo({ light }: { light?: boolean }) {
   return (
     <span className="flex items-center gap-2.5">
-      <span className="grid h-10 w-10 place-items-center rounded-xl bg-accent-400 text-primary-950">
-        <GraduationCap className="h-6 w-6" aria-hidden />
+      <span className="grid h-11 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-[#fffcf7]">
+        <img src="/rainbow-pencil.png" alt="" width="56" height="44" className="h-full w-full object-contain" />
       </span>
-      <span className={`text-lg font-extrabold tracking-tight ${light ? 'text-white' : 'text-primary-950'}`}>{appConfig.appName}</span>
+      <span className={`text-lg font-extrabold tracking-tight ${light ? 'text-white' : 'text-primary-950'}`}>{appConfig.organization}</span>
     </span>
   );
 }
