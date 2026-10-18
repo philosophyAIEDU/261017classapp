@@ -44,7 +44,7 @@ export function PhotoUploader({ items, onChange, max = appConfig.routines.maxPho
     setBusy(true);
     try {
       const compressed = await Promise.all(
-        files.map((f) => imageCompression(f, { maxSizeMB: 0.5, maxWidthOrHeight: 1280, useWebWorker: true })),
+        files.map((f) => imageCompression(f, { maxSizeMB: 0.5, maxWidthOrHeight: 1280, useWebWorker: false })),
       );
       onChange([...items, ...compressed.map((file) => ({ file }))]);
     } catch {
