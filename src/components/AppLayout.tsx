@@ -1,6 +1,7 @@
 // 로그인 후 화면의 공통 틀: 머리글 + 메뉴 + 본문. 학생은 휴대폰 아래쪽 탭, 교사는 위쪽 메뉴.
 
 import {
+  Bot,
   BookOpenCheck,
   CalendarCheck,
   FolderHeart,
@@ -41,6 +42,7 @@ const teacherNav: NavItem[] = [
   { to: '/teacher/tutors', label: '튜터 관리', icon: MessageCircleQuestion, module: 'tutor' },
   { to: '/teacher/members', label: '구성원', icon: Users },
   { to: '/teacher/qr', label: '입장 QR', icon: QrCode },
+  { to: '/teacher/settings', label: 'AI 설정', icon: Bot },
 ];
 
 export function AppLayout() {

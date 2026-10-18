@@ -14,6 +14,7 @@ import Home from './pages/student/Home';
 import Portfolio from './pages/student/Portfolio';
 import Routines from './pages/student/Routines';
 import Tutor from './pages/student/Tutor';
+import AiSettings from './pages/teacher/AiSettings';
 import AssignmentReview from './pages/teacher/AssignmentReview';
 import CreateClass from './pages/teacher/CreateClass';
 import Dashboard from './pages/teacher/Dashboard';
@@ -51,6 +52,7 @@ export function AppRoutes() {
         <Route path="/teacher/members" element={<RequireRole role="teacher"><Members /></RequireRole>} />
         <Route path="/teacher/members/:uid" element={<RequireRole role="teacher"><StudentDetail /></RequireRole>} />
         <Route path="/teacher/qr" element={<RequireRole role="teacher"><JoinQR /></RequireRole>} />
+        <Route path="/teacher/settings" element={<RequireRole role="teacher"><AiSettings /></RequireRole>} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

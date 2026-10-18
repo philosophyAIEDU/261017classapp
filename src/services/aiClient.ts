@@ -1,8 +1,10 @@
 // AI 계층: 화면은 이 파일의 aiClient 만 씁니다.
-// .env 의 VITE_AI_MODE 값에 따라 샘플 AI(MockAiClient) 또는 진짜 Gemini(NetlifyAiClient, 2단계)를 고릅니다.
+// 교사 "AI 설정"(처음 값은 .env 의 VITE_AI_MODE)에 따라 샘플 AI(MockAiClient) 또는 진짜 Gemini(NetlifyAiClient)를 고릅니다.
 
+import { useAiSettings } from '../store/aiSettingsStore';
 import type { AiFeedback, Assignment, TutorRoom } from '../types';
 import { MockAiClient } from './MockAiClient';
+import { NetlifyAiClient } from './NetlifyAiClient';
 
 export interface FeedbackRequest {
   assignment: Pick<Assignment, 'title' | 'prompt' | 'rubric' | 'tone' | 'minChars' | 'maxChars'>;
@@ -22,8 +24,20 @@ export interface AiClient {
   askTutor(request: TutorRequest): Promise<string>;
 }
 
-/** 학생에게 보여 줄 쉬운 오류 */
-export class AiError extends Error {}
+export { AiError } from './AiError';
 
-// 2단계에서 env.aiMode === 'gemini' 이면 NetlifyAiClient 를 쓰도록 바뀝니다.
-export const aiClient: AiClient = new MockAiClient();
+const mockClient = new MockAiClient();
+
+export const geminiClient = new NetlifyAiClient((purpose) => {
+  const s = useAiSettings.getState();
+  return { apiKey: s.apiKey, model: purpose === 'tutor' ? s.tutorModel : s.feedbackModel };
+});
+
+function current(): AiClient {
+  return useAiSettings.getState().mode === 'gemini' ? geminiClient : mockClient;
+}
+
+export const aiClient: AiClient = {
+  getFeedback: (request) => current().getFeedback(request),
+  askTutor: (request) => current().askTutor(request),
+};

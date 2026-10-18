@@ -4,8 +4,9 @@ import { GraduationCap, RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { appConfig, terms } from '../config/appConfig';
-import { env, modeLabel } from '../config/env';
+import { env } from '../config/env';
 import { repo } from '../repositories';
+import { useAiSettings, useModeLabel } from '../store/aiSettingsStore';
 import { useSession } from '../store/sessionStore';
 import type { Role } from '../types';
 
@@ -22,11 +23,13 @@ export function Logo({ light }: { light?: boolean }) {
 
 /** 화면 아래 작은 배지: 지금 어떤 모드로 동작하는지 */
 export function ModeBadge() {
+  const label = useModeLabel();
+  const aiMode = useAiSettings((s) => s.mode);
   return (
     <div className="no-print pointer-events-none fixed bottom-[84px] right-3 z-30 sm:bottom-3">
       <span className="chip pointer-events-auto border border-primary-100 bg-white/95 text-[13px] text-primary-700 shadow-card">
-        <span className={`h-2 w-2 rounded-full ${env.aiMode === 'mock' ? 'bg-accent-400' : 'bg-success'}`} aria-hidden />
-        {modeLabel}
+        <span className={`h-2 w-2 rounded-full ${aiMode === 'mock' ? 'bg-accent-400' : 'bg-success'}`} aria-hidden />
+        {label}
       </span>
     </div>
   );

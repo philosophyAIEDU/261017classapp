@@ -17,5 +17,5 @@
     "noFallthroughCasesInSwitch": true,
     "types": ["vite/client", "vitest/globals", "@testing-library/jest-dom"]
   },
-  "include": ["src", "tailwind.config.ts", "vite.config.ts"]
+  "include": ["src", "netlify", "tailwind.config.ts", "vite.config.ts"]
 }

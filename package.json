@@ -10,9 +10,11 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "dev:ai": "netlify dev"
   },
   "dependencies": {
+    "@google/genai": "^1.52.0",
     "browser-image-compression": "^2.0.2",
     "date-fns": "^3.6.0",
     "date-fns-tz": "^3.2.0",
