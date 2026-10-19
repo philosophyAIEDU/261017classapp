@@ -62,7 +62,7 @@ export function AppLayout() {
   return (
     <div className="min-h-screen pb-28 sm:pb-12">
       <DemoBar />
-      <header className="no-print sticky top-0 z-20 border-b border-primary-100 bg-white/95 backdrop-blur">
+      <header className="app-header no-print sticky top-0 z-20 border-b border-primary-100 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5">
           <NavLink to={isTeacher ? '/teacher' : '/home'} className="min-w-0">
             <Logo />
@@ -92,7 +92,7 @@ export function AppLayout() {
               end={item.end}
               className={({ isActive }) =>
                 `flex min-h-touch shrink-0 items-center gap-2 rounded-xl px-4 font-semibold transition-colors ${
-                  isActive ? 'bg-primary-900 text-white' : 'text-primary-800 hover:bg-primary-50'
+                  isActive ? 'bg-primary-100 text-primary-900 shadow-sm' : 'text-primary-800 hover:bg-primary-50'
                 }`
               }
             >

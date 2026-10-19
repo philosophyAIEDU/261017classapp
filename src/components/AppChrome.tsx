@@ -1,6 +1,6 @@
 // 화면 테두리 요소: 데모 전환 막대, 모드 배지, 로고
 
-import { GraduationCap, RotateCcw } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { appConfig, terms } from '../config/appConfig';
@@ -13,10 +13,10 @@ import type { Role } from '../types';
 export function Logo({ light }: { light?: boolean }) {
   return (
     <span className="flex items-center gap-2.5">
-      <span className="grid h-10 w-10 place-items-center rounded-xl bg-accent-400 text-primary-950">
-        <GraduationCap className="h-6 w-6" aria-hidden />
+      <span className="grid h-11 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-[#fffcf7]">
+        <img src="/rainbow-pencil.png" alt="" width="56" height="44" className="h-full w-full object-contain" />
       </span>
-      <span className={`text-lg font-extrabold tracking-tight ${light ? 'text-white' : 'text-primary-950'}`}>{appConfig.appName}</span>
+      <span className={`text-lg font-extrabold tracking-tight ${light ? 'text-white' : 'text-primary-950'}`}>{appConfig.organization}</span>
     </span>
   );
 }
@@ -67,7 +67,7 @@ export function DemoBar() {
         disabled={busy}
         onClick={() => switchTo(role)}
         aria-pressed={active}
-        className={`min-h-touch whitespace-nowrap rounded-lg px-3 text-[15px] font-bold transition-colors ${active ? 'bg-accent-400 text-primary-950' : 'text-white hover:bg-white/10'}`}
+        className={`min-h-touch whitespace-nowrap rounded-lg px-3 text-[15px] font-bold transition-colors ${active ? 'bg-accent-400 text-primary-950' : 'text-primary-700 hover:bg-white/60'}`}
       >
         {label}
       </button>
@@ -75,9 +75,9 @@ export function DemoBar() {
   };
 
   return (
-    <div className="no-print bg-primary-950 text-white">
+    <div className="no-print border-b border-primary-100 bg-primary-50 text-primary-900">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-1.5">
-        <span className="hidden text-[14px] font-semibold text-primary-200 sm:inline">체험용 데모</span>
+        <span className="hidden text-[14px] font-semibold text-primary-700 sm:inline">체험용 데모</span>
         <div className="flex items-center gap-1 rounded-xl bg-white/5 p-1">
           {tab('teacher', `${terms.teacher}으로 보기`)}
           {tab('student', `${terms.student}으로 보기`)}
@@ -86,7 +86,7 @@ export function DemoBar() {
           type="button"
           onClick={reset}
           disabled={busy}
-          className="flex min-h-touch items-center gap-1 rounded-lg px-2 text-[14px] font-semibold text-primary-200 hover:text-white"
+          className="flex min-h-touch items-center gap-1 rounded-lg px-2 text-[14px] font-semibold text-primary-700 hover:text-primary-950"
         >
           <RotateCcw className="h-4 w-4" aria-hidden /> <span className="sr-only sm:not-sr-only">샘플 초기화</span>
         </button>
