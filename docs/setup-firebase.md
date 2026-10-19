@@ -61,7 +61,8 @@ Firebase 모드에서는 AI 요청마다 서버가 다음을 확인합니다.
 1. **로그인 토큰**이 진짜인지 (없거나 가짜면 거절)
 2. 그 사람이 **우리 클래스의 승인된 구성원**인지
 3. 그 클래스의 강사님 이메일이 **`TEACHER_EMAILS`에 있는지** (없으면 서버 키를 쓸 수 없어요)
-4. 수강생이면 **하루 사용 횟수**: AI 전체 40번, 그중 튜터 질문 20번 (`src/config/appConfig.ts`의 `ai.dailyAiLimit`, `ai.tutorDailyLimit`)
+4. **Gemini 무료 티어 보호**: 앱 전체가 1분에 8번, 하루에 200번을 넘으면 AI를 부르지 않아요. (`ai.freeTier`)
+5. 수강생이면 **하루 사용 횟수**: AI 전체 20번, 그중 튜터 질문 15번 (`src/config/appConfig.ts`의 `ai.dailyAiLimit`, `ai.tutorDailyLimit`)
 
 그래서 배포 주소를 알아도, 승인받지 않은 사람은 서버 키를 쓸 수 없어요.
 `TEACHER_EMAILS`를 비워 두면 서버 키는 아무도 못 쓰고, 각자 **AI 설정**에 자기 키를 넣은 기기에서만 진짜 AI가 동작합니다.

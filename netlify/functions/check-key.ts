@@ -12,7 +12,8 @@ export default async function handler(req: Request): Promise<Response> {
     const access = await checkAiAccess(req, body, 'check');
     const apiKey = resolveApiKey(req, access.allowEnvKey);
     const model = resolveModel(req, 'feedback');
-    await callGemini({ apiKey, model, system: '한 단어로만 답한다.', turns: [{ role: 'user', text: '"좋아요"라고만 답해 줘.' }], temperature: 0 });
+    await access.consume();
+    await callGemini({ apiKey, model, system: '한 단어로만 답한다.', turns: [{ role: 'user', text: '"좋아요"라고만 답해 줘.' }], temperature: 0, maxOutputTokens: 10 });
     return json(200, { ok: true, model });
   } catch (error) {
     return errorResponse(error);

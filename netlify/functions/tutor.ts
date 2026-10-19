@@ -1,6 +1,7 @@
 // AI 탐구 튜터 함수: 튜터 방 설정 + 대화 기록 + 새 질문 → Gemini → 힌트 답변
 // 주소: POST /.netlify/functions/tutor
 
+import { appConfig } from '../../src/config/appConfig';
 import { buildTutorSystemPrompt } from '../../src/prompts/tutorPrompt';
 import { checkAiAccess } from './_shared/aiAccess';
 import { resolveApiKey, resolveModel } from './_shared/apiKey';
@@ -54,7 +55,7 @@ export default async function handler(req: Request): Promise<Response> {
       teacherInstruction: asString(room.teacherInstruction).trim().slice(0, 600),
     });
 
-    const answer = await callGemini({ apiKey, model, system, turns: buildTurns(body.history, message), temperature: 0.7 });
+    const answer = await callGemini({ apiKey, model, system, turns: buildTurns(body.history, message), temperature: 0.7, maxOutputTokens: appConfig.ai.freeTier.maxOutputTokens.tutor });
     return json(200, { answer, model });
   } catch (error) {
     return errorResponse(error);

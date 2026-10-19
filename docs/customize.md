@@ -51,7 +51,9 @@ routines: {
   streakBadges: [3, 7, 14, 30],            // 🔥 불꽃 배지를 주는 연속 인증일
 },
 ai: {
-  tutorDailyLimit: 20,                     // 학생 1명이 하루에 튜터에게 질문할 수 있는 횟수
+  tutorDailyLimit: 15,                     // 수강생 1명이 하루에 튜터에게 질문할 수 있는 횟수
+  dailyAiLimit: 20,                        // 수강생 1명이 하루에 AI(첨삭+튜터)를 부를 수 있는 횟수
+  freeTier: { requestsPerMinute: 8, requestsPerDay: 200, ... }, // 🆓 앱 전체 무료 티어 보호 (docs/setup-gemini.md 5번)
   maxInputChars: 4000,                     // AI에게 보낼 수 있는 최대 글자 수
   defaultFeedbackTone: 'coach',            // 'coach' 다정한 코치 / 'editor' 꼼꼼한 편집자
   defaultTutorPersona: '친절하고 차분한 영어 코치',

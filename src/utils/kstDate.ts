@@ -11,6 +11,11 @@ export function toKstDate(date: Date | string): KstDate {
   return formatInTimeZone(new Date(date), KST, 'yyyy-MM-dd');
 }
 
+/** 분 단위 열쇠 'yyyyMMddHHmm' (한국 시간) — 1분당 요청 수를 셀 때 사용 */
+export function kstMinuteKey(now: Date = new Date()): string {
+  return formatInTimeZone(now, KST, 'yyyyMMddHHmm');
+}
+
 /** 지금 한국 날짜 */
 export function todayKst(now: Date = new Date()): KstDate {
   return toKstDate(now);

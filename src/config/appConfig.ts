@@ -67,11 +67,20 @@ export const appConfig = {
 
   // ── 7. AI 기본값 ─────────────────────────────
   ai: {
-    tutorDailyLimit: 20, // 학생 1명이 하루에 튜터에게 질문할 수 있는 횟수
-    dailyAiLimit: 40, // (Firebase 모드) 수강생 1명이 하루에 AI(첨삭+튜터)를 부를 수 있는 전체 횟수 — 서버가 지켜요
+    tutorDailyLimit: 15, // 학생 1명이 하루에 튜터에게 질문할 수 있는 횟수
+    dailyAiLimit: 20, // (Firebase 모드) 수강생 1명이 하루에 AI(첨삭+튜터)를 부를 수 있는 전체 횟수 — 서버가 지켜요
     maxInputChars: 4000, // AI에게 보낼 수 있는 최대 글자 수
     defaultFeedbackTone: 'coach' as 'coach' | 'editor', // coach = 다정한 코치, editor = 꼼꼼한 편집자
     defaultTutorPersona: '친절하고 차분한 영어 코치',
+
+    // 🆓 Gemini 무료 티어 지키기 — 우리 앱 전체(클래스 단위)가 아래 횟수를 넘으면 서버가 AI를 부르지 않아요.
+    // Google AI Studio → 대시보드 → 사용량·비율 제한(Rate limits)에서 내 키의 무료 한도를 확인하고,
+    // 그보다 조금 낮게 적어 두세요. (모델마다, 시기마다 무료 한도가 달라요)
+    freeTier: {
+      requestsPerMinute: 8, // 1분에 최대 몇 번 (무료 한도 RPM보다 낮게)
+      requestsPerDay: 200, // 하루(한국 시간 자정 기준)에 최대 몇 번 (무료 한도 RPD보다 낮게)
+      maxOutputTokens: { feedback: 1200, tutor: 400 }, // AI 답 길이 상한 (토큰 = 글자 조각)
+    },
   },
 };
 

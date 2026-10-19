@@ -50,6 +50,18 @@ service cloud.firestore {
                     && isTeacherAfter(request.resource.data.classId);
     }
 
+    // 🆓 앱 전체 AI 호출 횟수 (Gemini 무료 티어 보호용, 서버 함수가 1씩 늘림)
+    // d_날짜 = 하루 합계, m_분 = 1분 합계. 승인된 구성원만 늘릴 수 있고, 줄일 수는 없어요.
+    match /aiQuota/{id} {
+      allow get: if signedIn();
+      allow create: if isApproved(request.resource.data.lastClassId)
+                    && (id == 'd_' + request.resource.data.key || id == 'm_' + request.resource.data.key)
+                    && request.resource.data.count == 1;
+      allow update: if isApproved(request.resource.data.lastClassId)
+                    && request.resource.data.key == resource.data.key
+                    && request.resource.data.count == resource.data.count + 1;
+    }
+
     match /classes/{cid} {
       allow read: if isTeacher(cid) || isMember(cid);
       allow create: if signedIn() && request.resource.data.teacherUid == request.auth.uid

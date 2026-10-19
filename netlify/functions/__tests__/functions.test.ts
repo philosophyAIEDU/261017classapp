@@ -23,6 +23,7 @@ const feedback = (await import('../feedback')).default;
 const tutor = (await import('../tutor')).default;
 const checkKey = (await import('../check-key')).default;
 const { buildTurns } = await import('../tutor');
+const { resetLocalCounter } = await import('../_shared/aiAccess');
 const { sanitizeRubric } = await import('../feedback');
 
 const KEY = 'AIzaTESTKEY_1234567890abcdef';
@@ -41,6 +42,7 @@ async function read(res: Response) {
 }
 
 beforeEach(() => {
+  resetLocalCounter();
   generateContent.mockReset();
   delete process.env.GEMINI_API_KEY;
   delete process.env.GEMINI_MODEL;
@@ -111,7 +113,7 @@ describe('feedback 함수', () => {
       [new ApiError({ message: 'API key not valid. secret-detail', status: 400 }), 401, 'API 키가 올바르지 않아요'],
       [new ApiError({ message: 'denied', status: 403 }), 403, '권한'],
       [new ApiError({ message: 'models/x is not found', status: 404 }), 404, '모델'],
-      [new ApiError({ message: 'quota', status: 429 }), 429, '잠시 후'],
+      [new ApiError({ message: 'quota', status: 429 }), 429, '무료 사용량'],
       [new ApiError({ message: 'bad', status: 400 }), 400, '처리하지 못했어요'],
       [new Error('socket hang up at 10.0.0.1'), 502, '연결'],
     ];
@@ -173,6 +175,16 @@ describe('tutor 함수', () => {
     ]);
     const long = Array.from({ length: 30 }, (_, i) => ({ role: i % 2 ? 'tutor' : 'student', text: 'x'.repeat(900) }));
     expect(buildTurns(long, 'q').length).toBeLessThanOrEqual(6);
+  });
+});
+
+describe('로컬 모드 무료 티어 보호', () => {
+  it('1분에 8번을 넘으면 429', async () => {
+    generateContent.mockResolvedValue({ text: '{}' });
+    for (let i = 0; i < 8; i += 1) expect((await feedback(post('feedback', { assignment: { rubric }, text: '글' }))).status).toBe(200);
+    const res = await read(await feedback(post('feedback', { assignment: { rubric }, text: '글' })));
+    expect(res.status).toBe(429);
+    expect(generateContent).toHaveBeenCalledTimes(8);
   });
 });
 

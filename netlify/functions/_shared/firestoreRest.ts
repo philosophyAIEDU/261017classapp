@@ -37,23 +37,27 @@ export async function getDocAs(token: string, path: string): Promise<PlainDoc | 
   return toPlain(data.fields);
 }
 
+export interface CounterWrite {
+  /** documents/ 뒤의 경로. 예) classes/c1/aiUsage/u1_2026-10-19 */
+  path: string;
+  /** 함께 저장할 글자 값 (예: uid, date) */
+  fields: Record<string, string>;
+  /** 늘릴 숫자 항목과 늘릴 양 (예: { count: 1, tutor: 0 }) */
+  increments: Record<string, number>;
+}
+
 /**
- * 오늘 AI 사용 횟수 +1 (튜터 질문이면 tutor 도 +1). 새 횟수를 돌려줍니다.
+ * 여러 카운터를 한 번에 +1 하고, 늘어난 뒤의 값을 돌려줍니다. (모두 성공하거나 모두 실패)
  * firestore.rules 가 "정확히 1씩만 늘리기"를 강제하므로 학생이 직접 숫자를 줄일 수 없어요.
  */
-export async function incrementUsage(token: string, classId: string, uid: string, date: string, tutor: boolean): Promise<{ count: number; tutor: number }> {
-  const name = `projects/${firebaseProjectId()}/databases/(default)/documents/classes/${classId}/aiUsage/${uid}_${date}`;
+export async function incrementCounters(token: string, writes: CounterWrite[]): Promise<Record<string, number>[]> {
+  const root = `projects/${firebaseProjectId()}/databases/(default)/documents`;
   const body = {
-    writes: [
-      {
-        update: { name, fields: { uid: { stringValue: uid }, date: { stringValue: date } } },
-        updateMask: { fieldPaths: ['uid', 'date'] },
-        updateTransforms: [
-          { fieldPath: 'count', increment: { integerValue: '1' } },
-          { fieldPath: 'tutor', increment: { integerValue: tutor ? '1' : '0' } },
-        ],
-      },
-    ],
+    writes: writes.map((w) => ({
+      update: { name: `${root}/${w.path}`, fields: Object.fromEntries(Object.entries(w.fields).map(([k, v]) => [k, { stringValue: v }])) },
+      updateMask: { fieldPaths: Object.keys(w.fields) },
+      updateTransforms: Object.entries(w.increments).map(([fieldPath, n]) => ({ fieldPath, increment: { integerValue: String(n) } })),
+    })),
   };
   let res: Response;
   try {
@@ -65,9 +69,11 @@ export async function incrementUsage(token: string, classId: string, uid: string
   } catch {
     throw new FriendlyError(502, '데이터베이스에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.');
   }
-  if (res.status === 403) throw new FriendlyError(403, '사용 기록을 남길 권한이 없어요. 승인된 계정인지 확인해 주세요.');
+  if (res.status === 403) throw new FriendlyError(403, '사용 기록을 남길 권한이 없어요. 승인된 계정인지, 최신 firestore.rules 를 게시했는지 확인해 주세요.');
   if (!res.ok) throw new FriendlyError(502, '데이터베이스에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.');
   const data = (await res.json()) as { writeResults?: { transformResults?: FirestoreValue[] }[] };
-  const results = data.writeResults?.[0]?.transformResults ?? [];
-  return { count: Number(results[0]?.integerValue ?? 0), tutor: Number(results[1]?.integerValue ?? 0) };
+  return writes.map((w, i) => {
+    const results = data.writeResults?.[i]?.transformResults ?? [];
+    return Object.fromEntries(Object.keys(w.increments).map((k, j) => [k, Number(results[j]?.integerValue ?? 0)]));
+  });
 }

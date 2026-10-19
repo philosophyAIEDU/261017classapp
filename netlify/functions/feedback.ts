@@ -51,7 +51,7 @@ export default async function handler(req: Request): Promise<Response> {
     await access.consume();
     const prompt = buildFeedbackPrompt({ title: cut(assignment.title, 100), prompt: cut(assignment.prompt, 1500), rubric, tone, text });
 
-    const raw = await callGemini({ apiKey, model, system: prompt.system, turns: [{ role: 'user', text: prompt.user }], json: true, temperature: 0.4 });
+    const raw = await callGemini({ apiKey, model, system: prompt.system, turns: [{ role: 'user', text: prompt.user }], json: true, temperature: 0.4, maxOutputTokens: appConfig.ai.freeTier.maxOutputTokens.feedback });
     return json(200, { feedback: parseFeedback(raw, rubric), model });
   } catch (error) {
     return errorResponse(error);
