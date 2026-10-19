@@ -22,7 +22,7 @@
 | 2. 진짜 AI(Gemini) 쓰기 | [docs/setup-gemini.md](docs/setup-gemini.md) |
 | 3. 인터넷 주소로 배포하기 (Netlify) | [docs/deploy-netlify.md](docs/deploy-netlify.md) |
 | 4. 앱 이름·색·기능·AI 지시문 바꾸기 | [docs/customize.md](docs/customize.md) |
-| 5. (나중에) 수강생 기기마다 함께 쓰기 — Firebase | [docs/firebase-structure.md](docs/firebase-structure.md) |
+| 5. 강사님·수강생이 각자 기기에서 함께 쓰기 — Firebase | [docs/setup-firebase.md](docs/setup-firebase.md) · 구조: [docs/firebase-structure.md](docs/firebase-structure.md) |
 
 ---
 
@@ -48,9 +48,12 @@
 
 ## 지금 버전에서 알아 둘 점
 
-- **데이터는 각 브라우저에 저장됩니다(로컬 모드).** 한 기기에서 강사님·수강생 화면을 오가며 **시연**하기에 알맞아요.
-  수강생들이 각자 기기로 함께 쓰려면 나중에 Firebase를 붙이면 됩니다. 화면 코드는 그대로 두고 저장소만 바꾸도록 설계되어 있어요.
-- **Gemini API 키는 AI 설정에서 각자 넣습니다.** 키는 그 브라우저에만 저장되고, AI를 부를 때 우리 앱 서버(Netlify Functions)로만 전달돼요. 서버는 키를 저장·기록하지 않습니다.
+- **저장 방식은 두 가지예요.** (`VITE_DATA_MODE`)
+  - `local`(기본): 데이터가 **그 브라우저에만** 저장돼요. 샘플 데이터와 "강사님/수강생으로 보기"로 **시연**하기에 알맞아요.
+  - `firebase`: 데이터가 **온라인(Firebase)**에 저장되고 진짜 로그인(강사님 Google · 수강생 클래스 코드)이 동작해요. 실제 수업용 → [docs/setup-firebase.md](docs/setup-firebase.md)
+- **Gemini API 키**는 두 가지 방법으로 넣어요.
+  - 강사님 화면 **AI 설정**: 그 브라우저에만 저장되고, AI를 부를 때 우리 앱 서버로만 전달돼요. (서버는 키를 저장·기록하지 않음)
+  - Netlify 환경변수 `GEMINI_API_KEY` + `TEACHER_EMAILS`: Firebase 모드에서 **수강생 휴대폰에서도** 진짜 AI가 동작해요. 로그인·승인·하루 사용량을 서버가 확인합니다.
 - **Netlify Drop(드래그앤드롭) 배포는 AI가 동작하지 않습니다.** GitHub 연결로 배포하세요.
 
 ## 안전과 개인정보

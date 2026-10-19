@@ -11,7 +11,7 @@ import { repo } from '../../repositories';
 import { useSession } from '../../store/sessionStore';
 import { AuthShell, Field } from './AuthShell';
 
-const MIN_PASSWORD = 4;
+const MIN_PASSWORD = 6; // Firebase 로그인은 6자 이상이어야 해요
 
 export default function StudentJoin() {
   const [params] = useSearchParams();

@@ -13,6 +13,8 @@
 
 [functions]
   node_bundler = "esbuild"
+  # firebase-admin 은 묶지 않고 그대로 올립니다 (Firebase 로그인 확인용)
+  external_node_modules = ["firebase-admin"]
 
 # 내 컴퓨터에서 "npm run dev:ai" (= netlify dev) 로 실행할 때 설정
 [dev]

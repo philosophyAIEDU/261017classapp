@@ -1,7 +1,9 @@
 // AI 계층: 화면은 이 파일의 aiClient 만 씁니다.
 // 교사 "AI 설정"(처음 값은 .env 의 VITE_AI_MODE)에 따라 샘플 AI(MockAiClient) 또는 진짜 Gemini(NetlifyAiClient)를 고릅니다.
 
+import { repo } from '../repositories';
 import { useAiSettings } from '../store/aiSettingsStore';
+import { useSession } from '../store/sessionStore';
 import type { AiFeedback, Assignment, TutorRoom } from '../types';
 import { MockAiClient } from './MockAiClient';
 import { NetlifyAiClient } from './NetlifyAiClient';
@@ -28,9 +30,14 @@ export { AiError } from './AiError';
 
 const mockClient = new MockAiClient();
 
-export const geminiClient = new NetlifyAiClient((purpose) => {
+export const geminiClient = new NetlifyAiClient(async (purpose) => {
   const s = useAiSettings.getState();
-  return { apiKey: s.apiKey, model: purpose === 'tutor' ? s.tutorModel : s.feedbackModel };
+  return {
+    apiKey: s.apiKey,
+    model: purpose === 'tutor' ? s.tutorModel : s.feedbackModel,
+    idToken: repo.getIdToken ? await repo.getIdToken() : null,
+    classId: useSession.getState().user?.classId ?? null,
+  };
 });
 
 function current(): AiClient {

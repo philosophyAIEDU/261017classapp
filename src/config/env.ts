@@ -9,6 +9,8 @@ const rawDemo = import.meta.env.VITE_DEMO_MODE;
 
 export const env = {
   dataMode: (rawData === 'firebase' ? 'firebase' : 'local') as DataMode,
-  aiMode: (rawAi === 'gemini' ? 'gemini' : 'mock') as AiMode,
-  demoMode: rawDemo === undefined ? true : rawDemo === 'true',
+  // AI 처음 값: 직접 정하지 않았다면 Firebase 모드(실제 수업)는 진짜 Gemini, 로컬 모드(연습)는 샘플 AI
+  aiMode: (rawAi === 'gemini' || (rawAi === undefined && rawData === 'firebase') ? 'gemini' : 'mock') as AiMode,
+  // 데모 모드(샘플 데이터 + 역할 전환)는 로컬 저장에서만 동작합니다.
+  demoMode: (rawDemo === undefined ? true : rawDemo === 'true') && rawData !== 'firebase',
 };

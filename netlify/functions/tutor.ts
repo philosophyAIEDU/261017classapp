@@ -2,6 +2,7 @@
 // 주소: POST /.netlify/functions/tutor
 
 import { buildTutorSystemPrompt } from '../../src/prompts/tutorPrompt';
+import { checkAiAccess } from './_shared/aiAccess';
 import { resolveApiKey, resolveModel } from './_shared/apiKey';
 import { callGemini, type GeminiTurn } from './_shared/gemini';
 import { asString, errorResponse, FriendlyError, json, readJsonBody } from './_shared/http';
@@ -43,8 +44,10 @@ export default async function handler(req: Request): Promise<Response> {
     const topic = asString(room.topic).trim().slice(0, 60);
     if (!topic) throw new FriendlyError(400, '튜터 방 정보가 없어요. 다시 들어와 주세요.');
 
-    const apiKey = resolveApiKey(req);
+    const access = await checkAiAccess(req, body, 'tutor');
+    const apiKey = resolveApiKey(req, access.allowEnvKey);
     const model = resolveModel(req, 'tutor');
+    await access.consume();
     const system = buildTutorSystemPrompt({
       topic,
       persona: asString(room.persona).trim().slice(0, 80) || '친절한 탐구 튜터',

@@ -1,0 +1,142 @@
+rules_version = '2';
+
+// ─────────────────────────────────────────────
+// Firestore 보안 규칙 — Firebase 콘솔 → Firestore Database → 규칙(Rules) 탭에 통째로 붙여 넣고 [게시]를 누르세요.
+// 🔒 수강생·강사님 데이터를 지키는 규칙입니다. 내용을 바꾸지 않는 것을 권장해요.
+//
+// 요약
+// - 수강생: 자기 제출물·루틴 인증·튜터 대화·사진만 쓸 수 있고, 자기 클래스의 공개 자료(과제·루틴·튜터 방)만 읽을 수 있어요.
+// - 강사님: 자기 클래스의 모든 자료를 읽고 쓸 수 있어요.
+// - 승인 전 수강생: 아무것도 쓸 수 없어요. (가입 신청과 비밀번호 초기화 요청만 가능)
+// - AI 사용 횟수(aiUsage)는 1씩 늘리기만 할 수 있어서 수강생이 직접 줄일 수 없어요.
+// ─────────────────────────────────────────────
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function isSelf(uid) { return signedIn() && request.auth.uid == uid; }
+    function classPath(cid) { return /databases/$(database)/documents/classes/$(cid); }
+    function memberPath(cid) { return /databases/$(database)/documents/classes/$(cid)/members/$(request.auth.uid); }
+
+    function isTeacher(cid) {
+      return signedIn() && exists(classPath(cid)) && get(classPath(cid)).data.teacherUid == request.auth.uid;
+    }
+    // 같은 묶음(batch)에서 클래스를 막 만드는 중일 때
+    function isTeacherAfter(cid) {
+      return signedIn() && getAfter(classPath(cid)).data.teacherUid == request.auth.uid;
+    }
+    function isMember(cid) { return signedIn() && exists(memberPath(cid)); }
+    function isApproved(cid) { return isMember(cid) && get(memberPath(cid)).data.approved == true; }
+
+    function ownsNew() { return request.resource.data.uid == request.auth.uid; }
+    function ownsOld() { return resource.data.uid == request.auth.uid; }
+    function shortText(v, max) { return v is string && v.size() <= max; }
+
+    // 로그인한 사람이 누구인지 (역할·소속 클래스)
+    match /users/{uid} {
+      allow read: if isSelf(uid);
+      allow create: if isSelf(uid) && request.resource.data.uid == uid
+                    && request.resource.data.role in ['teacher', 'student'];
+      allow update: if isSelf(uid) && request.resource.data.role == resource.data.role
+                    && request.resource.data.uid == resource.data.uid;
+    }
+
+    // 6자리 클래스 코드 → 클래스 아이디 (가입 화면에서 코드로 찾기). 목록 보기는 막아서 코드를 훑어볼 수 없어요.
+    match /classCodes/{code} {
+      allow get: if true;
+      allow list: if false;
+      allow create: if signedIn() && request.resource.data.teacherUid == request.auth.uid
+                    && isTeacherAfter(request.resource.data.classId);
+    }
+
+    match /classes/{cid} {
+      allow read: if isTeacher(cid) || isMember(cid);
+      allow create: if signedIn() && request.resource.data.teacherUid == request.auth.uid
+                    && request.resource.data.teacherEmail == request.auth.token.email
+                    && request.resource.data.id == cid;
+      allow update: if isTeacher(cid)
+                    && request.resource.data.teacherUid == resource.data.teacherUid
+                    && request.resource.data.teacherEmail == resource.data.teacherEmail
+                    && request.resource.data.code == resource.data.code;
+
+      match /members/{uid} {
+        allow read: if isTeacher(cid) || isSelf(uid);
+        // 수강생 가입 신청: 자기 자신을, 승인 전 상태로만
+        allow create: if (isSelf(uid) && exists(classPath(cid)) && request.resource.data.uid == uid
+                          && request.resource.data.role == 'student' && request.resource.data.approved == false
+                          && shortText(request.resource.data.name, 20) && shortText(request.resource.data.studentNo, 10))
+                      // 강사님이 클래스를 만들 때 자기 자신을 등록
+                      || (isSelf(uid) && isTeacherAfter(cid) && request.resource.data.role == 'teacher');
+        allow update, delete: if isTeacher(cid);
+      }
+
+      // 비밀번호를 잊은 수강생의 초기화 요청 (로그인 전이라 누구나 "쓰기"만 가능)
+      match /resetRequests/{id} {
+        allow create: if request.resource.data.keys().hasOnly(['studentNo', 'name', 'createdAt'])
+                      && shortText(request.resource.data.studentNo, 10)
+                      && shortText(request.resource.data.name, 20)
+                      && shortText(request.resource.data.createdAt, 40);
+        allow read, delete: if isTeacher(cid);
+      }
+
+      // 강사님이 만드는 공개 자료
+      match /assignments/{id} {
+        allow read: if isTeacher(cid) || isApproved(cid);
+        allow write: if isTeacher(cid);
+      }
+      match /routines/{id} {
+        allow read: if isTeacher(cid) || isApproved(cid);
+        allow write: if isTeacher(cid);
+      }
+      match /tutorRooms/{id} {
+        allow read: if isTeacher(cid) || isApproved(cid);
+        allow write: if isTeacher(cid);
+      }
+
+      // 수강생 각자의 기록
+      match /submissions/{id} {
+        allow read: if isTeacher(cid) || (isApproved(cid) && ownsOld());
+        allow create: if isApproved(cid) && ownsNew();
+        allow update: if isTeacher(cid) || (isApproved(cid) && ownsOld() && ownsNew());
+        allow delete: if isTeacher(cid);
+      }
+      match /routineLogs/{id} {
+        allow read: if isTeacher(cid) || (isApproved(cid) && ownsOld());
+        // 아이디가 "루틴_수강생_날짜"라서 하루에 하나만 생겨요
+        allow create, update: if isApproved(cid) && ownsNew() && (resource == null || ownsOld())
+                              && id == request.resource.data.routineId + '_' + request.auth.uid + '_' + request.resource.data.date
+                              && shortText(request.resource.data.text, 300)
+                              && request.resource.data.imageUrls.size() <= 2;
+        allow delete: if isTeacher(cid);
+      }
+      match /tutorMessages/{id} {
+        allow read: if isTeacher(cid) || (isApproved(cid) && ownsOld());
+        allow create: if isApproved(cid) && ownsNew() && shortText(request.resource.data.text, 4000);
+        allow delete: if isTeacher(cid);
+      }
+      // 인증 사진 (압축한 사진을 글자로 바꿔 저장, 최대 약 700KB)
+      match /photos/{id} {
+        allow read: if isTeacher(cid) || (isApproved(cid) && ownsOld());
+        allow create: if isApproved(cid) && ownsNew()
+                      && request.resource.data.dataUrl is string
+                      && request.resource.data.dataUrl.matches('^data:image/(jpeg|png|webp|gif);base64,.*')
+                      && request.resource.data.dataUrl.size() < 700000;
+        allow delete: if isTeacher(cid) || (isApproved(cid) && ownsOld());
+      }
+      // 하루 AI 사용 횟수 (서버 함수가 수강생 토큰으로 1씩 늘림)
+      match /aiUsage/{id} {
+        allow get: if isTeacher(cid) || (isMember(cid) && id.matches(request.auth.uid + '_.*'));
+        allow list: if isTeacher(cid);
+        allow create: if isApproved(cid) && ownsNew()
+                      && id == request.auth.uid + '_' + request.resource.data.date
+                      && request.resource.data.count == 1
+                      && request.resource.data.tutor in [0, 1];
+        allow update: if isApproved(cid) && ownsOld() && ownsNew()
+                      && request.resource.data.date == resource.data.date
+                      && request.resource.data.count == resource.data.count + 1
+                      && request.resource.data.tutor in [resource.data.tutor, resource.data.tutor + 1];
+      }
+    }
+  }
+}

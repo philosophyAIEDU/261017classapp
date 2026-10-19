@@ -53,6 +53,9 @@ export interface AppRepository {
   /** 교사가 학생 비밀번호를 초기화하고 임시 비밀번호를 받습니다. */
   resetStudentPassword(classId: string, uid: string): Promise<string>;
 
+  /** 서버(Netlify Function)에 "누가 보냈는지" 증명하는 로그인 토큰 (Firebase 모드에서만 있음) */
+  getIdToken?(): Promise<string | null>;
+
   // ── 데모 모드 전용 (로컬 저장에서만 있음) ──
   demoSignIn?(role: Role): Promise<CurrentUser>;
   resetDemoData?(): Promise<void>;

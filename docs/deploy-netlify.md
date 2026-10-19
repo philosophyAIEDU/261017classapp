@@ -49,9 +49,12 @@ GitHub 웹사이트의 파일 올리기는 한 번에 100개까지만 돼서, �
 
    | 이름 | 값 | 설명 |
    | --- | --- | --- |
-   | `VITE_DEMO_MODE` | `true` 또는 `false` | `true`면 샘플 데이터와 "강사님/수강생으로 보기" 버튼이 보여요. 시연용은 `true` |
+   | `VITE_DATA_MODE` | `local` 또는 `firebase` | `firebase`면 온라인 저장 + 진짜 로그인 ([setup-firebase.md](./setup-firebase.md)) |
+   | `VITE_DEMO_MODE` | `true` 또는 `false` | 로컬 모드에서 `true`면 샘플 데이터와 "강사님/수강생으로 보기" 버튼이 보여요. Firebase 모드에선 자동으로 꺼져요 |
    | `VITE_AI_MODE` | `mock` 또는 `gemini` | 처음 열었을 때의 AI 모드. 보통은 비워 두고 앱의 AI 설정에서 바꿔요 |
-   | `GEMINI_API_KEY` | (비워 두기 권장) | 서버 기본 키. 넣으면 배포 주소를 아는 **누구나** 이 키를 쓸 수 있어요 |
+   | `GEMINI_API_KEY` | 내 Gemini 키 | 서버 기본 키. **Firebase 모드 + `TEACHER_EMAILS`**와 함께 쓰세요. 로컬 모드에서 넣으면 배포 주소를 아는 **누구나** 쓸 수 있어요 |
+   | `TEACHER_EMAILS` | 내 Google 이메일 | Firebase 모드에서 서버 키를 쓸 수 있는 강사님 (쉼표로 여러 명) |
+   | `FIREBASE_SERVICE_ACCOUNT` | 서비스 계정 키(JSON) | (선택) 수강생 비밀번호 초기화용 |
 
    > 🔐 **Gemini 키를 `VITE_`로 시작하는 이름에 절대 넣지 마세요.** `VITE_` 값은 누구나 볼 수 있는 화면 코드에 그대로 들어갑니다.
    > 환경변수를 바꾼 뒤에는 **Deploys → Trigger deploy → Deploy site**를 눌러야 반영돼요.
@@ -87,12 +90,11 @@ GitHub 저장소의 파일을 고치면 **Netlify가 자동으로 다시 배포*
 
 ## 지금 버전에서 알아 둘 점
 
-지금은 데이터가 **각 브라우저에 저장되는 로컬 모드**입니다. 그래서:
+환경변수 `VITE_DATA_MODE`에 따라 저장 방식이 달라요.
 
-- 강사님이 만든 과제·루틴은 **강사님 기기에만** 있고, 수강생 휴대폰에서는 보이지 않아요.
-- 한 기기(교실 TV, 노트북)에서 **"강사님으로 보기 / 수강생으로 보기"를 오가며 시연**하기에 알맞습니다.
-- 수강생들이 각자 기기로 함께 쓰려면 나중에 **Firebase(온라인 저장소·로그인)**를 붙이면 됩니다.
-  화면 코드는 그대로 두고 저장소 부분만 바꾸도록 설계되어 있어요. ([firebase-structure.md](./firebase-structure.md))
+- **없음 또는 `local`**: 데이터가 **각 브라우저에만** 저장돼요. 강사님이 만든 과제가 수강생 휴대폰에는 보이지 않아요.
+  한 기기(교실 TV, 노트북)에서 **"강사님으로 보기 / 수강생으로 보기"를 오가며 시연**하기에 알맞습니다.
+- **`firebase`**: 온라인에 저장되고 진짜 로그인이 동작해요. 실제 수업은 이 방식으로 → [setup-firebase.md](./setup-firebase.md)
 
 ## 문제가 생겼을 때
 

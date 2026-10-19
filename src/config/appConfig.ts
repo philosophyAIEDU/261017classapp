@@ -68,6 +68,7 @@ export const appConfig = {
   // ── 7. AI 기본값 ─────────────────────────────
   ai: {
     tutorDailyLimit: 20, // 학생 1명이 하루에 튜터에게 질문할 수 있는 횟수
+    dailyAiLimit: 40, // (Firebase 모드) 수강생 1명이 하루에 AI(첨삭+튜터)를 부를 수 있는 전체 횟수 — 서버가 지켜요
     maxInputChars: 4000, // AI에게 보낼 수 있는 최대 글자 수
     defaultFeedbackTone: 'coach' as 'coach' | 'editor', // coach = 다정한 코치, editor = 꼼꼼한 편집자
     defaultTutorPersona: '친절하고 차분한 영어 코치',

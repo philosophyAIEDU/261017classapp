@@ -1,10 +1,11 @@
 // AI 첨삭 함수: 학생 글 + 루브릭 → Gemini → 피드백 JSON
 // 주소: POST /.netlify/functions/feedback
 
-import { appConfig } from '../../src/config/appConfig';
+import { appConfig, terms } from '../../src/config/appConfig';
 import { buildFeedbackPrompt } from '../../src/prompts/feedbackPrompt';
 import { parseFeedback } from '../../src/prompts/parseFeedback';
 import type { FeedbackTone, RubricCriterion } from '../../src/types';
+import { checkAiAccess } from './_shared/aiAccess';
 import { resolveApiKey, resolveModel } from './_shared/apiKey';
 import { callGemini } from './_shared/gemini';
 import { asString, errorResponse, FriendlyError, json, readJsonBody } from './_shared/http';
@@ -41,11 +42,13 @@ export default async function handler(req: Request): Promise<Response> {
       throw new FriendlyError(413, `글은 ${MAX_TEXT_CHARS.toLocaleString()}자까지 보낼 수 있어요. 조금 줄여 주세요.`);
     }
     const rubric = sanitizeRubric(assignment.rubric);
-    if (rubric.length === 0) throw new FriendlyError(400, '이 과제에는 평가 기준이 없어요. 선생님께 알려 주세요.');
+    if (rubric.length === 0) throw new FriendlyError(400, `이 과제에는 평가 기준이 없어요. ${terms.teacher}께 알려 주세요.`);
     const tone: FeedbackTone = assignment.tone === 'editor' ? 'editor' : 'coach';
 
-    const apiKey = resolveApiKey(req);
+    const access = await checkAiAccess(req, body, 'feedback');
+    const apiKey = resolveApiKey(req, access.allowEnvKey);
     const model = resolveModel(req, 'feedback');
+    await access.consume();
     const prompt = buildFeedbackPrompt({ title: cut(assignment.title, 100), prompt: cut(assignment.prompt, 1500), rubric, tone, text });
 
     const raw = await callGemini({ apiKey, model, system: prompt.system, turns: [{ role: 'user', text: prompt.user }], json: true, temperature: 0.4 });
